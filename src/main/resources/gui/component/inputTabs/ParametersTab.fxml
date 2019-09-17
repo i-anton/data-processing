@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<fx:root type="Tab" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml" closable="false">
+    <content>
+        <VBox>
+            <VBox fx:id="extension"/>
+            <Button fx:id="applyButton">Применить</Button>
+        </VBox>
+    </content>
+</fx:root>

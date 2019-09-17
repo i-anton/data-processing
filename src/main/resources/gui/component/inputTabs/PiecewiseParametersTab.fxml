@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import gui.component.inputTabs.ParametersTab?>
+<?import javafx.scene.control.*?>
+<fx:root xmlns:fx="http://javafx.com/fxml" type="ParametersTab"
+         xmlns="http://javafx.com/javafx">
+    <Label text="Всего точек"/>
+    <TextField fx:id="dotsField"/>
+    <Label text="Шаг"/>
+    <TextField fx:id="stepField"/>
+</fx:root>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import gui.component.inputTabs.ParametersTab?>
+<?import javafx.scene.control.*?>
+<fx:root xmlns:fx="http://javafx.com/fxml" type="ParametersTab"
+         xmlns="http://javafx.com/javafx">
+    <Label text="Начальное X"/>
+    <TextField fx:id="startField"/>
+    <Label text="Конечное X"/>
+    <TextField fx:id="endField"/>
+    <Label text="Смещение"/>
+    <TextField fx:id="shiftField"/>
+    <Label text="Коэффициент масштаба"/>
+    <TextField fx:id="scaleField"/>
+</fx:root>
