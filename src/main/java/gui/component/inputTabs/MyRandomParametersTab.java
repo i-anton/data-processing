@@ -32,7 +32,7 @@ public class MyRandomParametersTab extends ParametersTab {
             } else {
                 dotsField.getStyleClass().add("error");
             }
-            setIsInvalid(dotsInvalid || seedInvalid);
+            setInvalid(dotsInvalid || seedInvalid);
         });
         seedField.setTextFormatter(new TextFormatter<>(change ->
                 (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null)); //accept only unsigned integer
@@ -43,14 +43,14 @@ public class MyRandomParametersTab extends ParametersTab {
             } else {
                 seedField.getStyleClass().add("error");
             }
-            setIsInvalid(seedInvalid || dotsInvalid);
+            setInvalid(seedInvalid || dotsInvalid);
         });
     }
 
     @Override
     public ArrayList<Line> generateResult() {
         ArrayList<Line> list = new ArrayList<>();
-        list.add(TrendLine.MyRandom(Integer.parseUnsignedInt(dotsField.getText()),
+        list.add(TrendLine.INSTANCE.myRandom(Integer.parseUnsignedInt(dotsField.getText()),
                 Integer.parseInt(seedField.getText())));
         return list;
     }

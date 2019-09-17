@@ -34,7 +34,7 @@ public class ExponentialParametersTab extends ParametersTab {
             } else {
                 koefField.getStyleClass().add("error");
             }
-            setIsInvalid(dotsInvalid || degreeInvalid || koefInvalid);
+            setInvalid(dotsInvalid || degreeInvalid || koefInvalid);
         });
         degreeField.setTextFormatter(new TextFormatter<>(new NumberStringConverter(nf)));
         degreeField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -44,7 +44,7 @@ public class ExponentialParametersTab extends ParametersTab {
             } else {
                 degreeField.getStyleClass().add("error");
             }
-            setIsInvalid(dotsInvalid || degreeInvalid || koefInvalid);
+            setInvalid(dotsInvalid || degreeInvalid || koefInvalid);
         });
         dotsField.setTextFormatter(new TextFormatter<>(change ->
                 (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null)); //accept only unsigned integer
@@ -55,14 +55,14 @@ public class ExponentialParametersTab extends ParametersTab {
             } else {
                 dotsField.getStyleClass().add("error");
             }
-            setIsInvalid(dotsInvalid || degreeInvalid || koefInvalid);
+            setInvalid(dotsInvalid || degreeInvalid || koefInvalid);
         });
     }
 
     @Override
     public ArrayList<Line> generateResult() {
         ArrayList<Line> list = new ArrayList<>();
-        list.add(TrendLine.Exponential(Integer.parseUnsignedInt(dotsField.getText()),
+        list.add(TrendLine.INSTANCE.exponential(Integer.parseUnsignedInt(dotsField.getText()),
                 Double.parseDouble(koefField.getText()),Double.parseDouble(degreeField.getText())));
         return list;
     }

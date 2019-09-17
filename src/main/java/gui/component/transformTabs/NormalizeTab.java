@@ -31,7 +31,7 @@ public class NormalizeTab extends ParametersTab {
             } else {
                 scaleField.getStyleClass().add("error");
             }
-            setIsInvalid(scaleInvalid);
+            setInvalid(scaleInvalid);
         });
     }
 
@@ -39,7 +39,7 @@ public class NormalizeTab extends ParametersTab {
     public ArrayList<Line> generateResult() {
         Line line = new Line(getInputLine());
         ArrayList<Line> list = new ArrayList<>();
-        SimpleTransforms.normalize(line,
+        SimpleTransforms.INSTANCE.normalize(line,
                 Double.parseDouble(scaleField.getText()));
         list.add(line);
         return list;

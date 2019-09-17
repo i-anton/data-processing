@@ -34,7 +34,7 @@ public class LinearParametersTab extends ParametersTab {
             } else {
                 angleField.getStyleClass().add("error");
             }
-            setIsInvalid(dotsInvalid || offsetInvalid || angleInvalid);
+            setInvalid(dotsInvalid || offsetInvalid || angleInvalid);
         });
         offsetField.setTextFormatter(new TextFormatter<>(new NumberStringConverter(nf)));
         offsetField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -44,7 +44,7 @@ public class LinearParametersTab extends ParametersTab {
             } else {
                 offsetField.getStyleClass().add("error");
             }
-            setIsInvalid(dotsInvalid || offsetInvalid || angleInvalid);
+            setInvalid(dotsInvalid || offsetInvalid || angleInvalid);
         });
         dotsField.setTextFormatter(new TextFormatter<>(change ->
                 (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null)); //accept only unsigned integer
@@ -55,14 +55,14 @@ public class LinearParametersTab extends ParametersTab {
             } else {
                 dotsField.getStyleClass().add("error");
             }
-            setIsInvalid(dotsInvalid || offsetInvalid || angleInvalid);
+            setInvalid(dotsInvalid || offsetInvalid || angleInvalid);
         });
     }
 
     @Override
     public ArrayList<Line> generateResult() {
         ArrayList<Line> list = new ArrayList<>();
-        list.add(TrendLine.Linear(Integer.parseUnsignedInt(dotsField.getText()),
+        list.add(TrendLine.INSTANCE.linear(Integer.parseUnsignedInt(dotsField.getText()),
                 Double.parseDouble(angleField.getText()),Double.parseDouble(offsetField.getText())));
         return list;
     }

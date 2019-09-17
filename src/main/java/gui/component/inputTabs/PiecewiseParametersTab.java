@@ -32,7 +32,7 @@ public class PiecewiseParametersTab extends ParametersTab {
             } else {
                 stepField.getStyleClass().add("error");
             }
-            setIsInvalid(dotsInvalid || stepInvalid);
+            setInvalid(dotsInvalid || stepInvalid);
         });
         dotsField.setTextFormatter(new TextFormatter<>(change ->
                 (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null)); //accept only unsigned integer
@@ -43,14 +43,14 @@ public class PiecewiseParametersTab extends ParametersTab {
             } else {
                 dotsField.getStyleClass().add("error");
             }
-            setIsInvalid(dotsInvalid || stepInvalid);
+            setInvalid(dotsInvalid || stepInvalid);
         });
     }
 
     @Override
     public ArrayList<Line> generateResult() {
         ArrayList<Line> list = new ArrayList<>();
-        list.add(TrendLine.Piecewise(Integer.parseUnsignedInt(dotsField.getText()),
+        list.add(TrendLine.INSTANCE.piecewise(Integer.parseUnsignedInt(dotsField.getText()),
                 Double.parseDouble(stepField.getText())));
         return list;
     }

@@ -3,7 +3,6 @@ package data.analysis;
 import data.Line;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Stationary {
     public static double avg(final Line line, int startIdx, int endIdx){

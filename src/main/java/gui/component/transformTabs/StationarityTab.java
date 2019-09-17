@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.util.converter.NumberStringConverter;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class StationarityTab extends ParametersTab {
             } else {
                 intervalsField.getStyleClass().add("error");
             }
-            setIsInvalid(intervalsInvalid || errorInvalid);
+            setInvalid(intervalsInvalid || errorInvalid);
         });
         errorField.setTextFormatter(new TextFormatter<>(new NumberStringConverter(nf)));
         errorField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -44,10 +45,11 @@ public class StationarityTab extends ParametersTab {
             } else {
                 errorField.getStyleClass().add("error");
             }
-            setIsInvalid(intervalsInvalid || errorInvalid);
+            setInvalid(intervalsInvalid || errorInvalid);
         });
     }
 
+    @NotNull
     @Override
     public ArrayList<Line> generateResult() {
         Line line = new Line(getInputLine());

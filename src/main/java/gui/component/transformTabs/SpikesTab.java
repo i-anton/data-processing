@@ -35,7 +35,7 @@ public class SpikesTab extends ParametersTab {
             } else {
                 scaleField.getStyleClass().add("error");
             }
-            setIsInvalid(seedInvalid || scaleInvalid || spikeInvalid);
+            setInvalid(seedInvalid || scaleInvalid || spikeInvalid);
         });
         seedField.setTextFormatter(new TextFormatter<>(change ->
                 (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null)); //accept only unsigned integer
@@ -46,7 +46,7 @@ public class SpikesTab extends ParametersTab {
             } else {
                 seedField.getStyleClass().add("error");
             }
-            setIsInvalid(seedInvalid || scaleInvalid || spikeInvalid);
+            setInvalid(seedInvalid || scaleInvalid || spikeInvalid);
         });
         spikeField.setTextFormatter(new TextFormatter<>(change ->
                 (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null)); //accept only unsigned integer
@@ -57,7 +57,7 @@ public class SpikesTab extends ParametersTab {
             } else {
                 spikeField.getStyleClass().add("error");
             }
-            setIsInvalid(seedInvalid || scaleInvalid || spikeInvalid);
+            setInvalid(seedInvalid || scaleInvalid || spikeInvalid);
         });
     }
 
@@ -65,7 +65,7 @@ public class SpikesTab extends ParametersTab {
     public ArrayList<Line> generateResult() {
         Line line = new Line(getInputLine());
         var list = new ArrayList<Line>();
-        SimpleTransforms.spikes(line,
+        SimpleTransforms.INSTANCE.spikes(line,
                 Integer.parseInt(seedField.getText()),
                 Integer.parseInt(spikeField.getText()),
                 Double.parseDouble(scaleField.getText()));

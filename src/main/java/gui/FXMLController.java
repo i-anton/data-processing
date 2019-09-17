@@ -47,7 +47,6 @@ public class FXMLController implements Initializable {
         for (XYChart c: charts) {
             c.getXAxis().setLabel("x");
             c.getYAxis().setLabel("y");
-            //TODO: Fix broken plugins
         }
     }
     private void addToInputParameters(final ParametersTab comp) {

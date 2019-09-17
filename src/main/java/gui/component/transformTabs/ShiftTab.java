@@ -38,7 +38,7 @@ public class ShiftTab extends ParametersTab {
             } else {
                 startField.getStyleClass().add("error");
             }
-            setIsInvalid(startInvalid || endInvalid ||shiftInvalid || scaleInvalid);
+            setInvalid(startInvalid || endInvalid ||shiftInvalid || scaleInvalid);
         });
         endField.setTextFormatter(new TextFormatter<>(new NumberStringConverter(nf)));
         endField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -48,7 +48,7 @@ public class ShiftTab extends ParametersTab {
             } else {
                 endField.getStyleClass().add("error");
             }
-            setIsInvalid(startInvalid || endInvalid ||shiftInvalid || scaleInvalid);
+            setInvalid(startInvalid || endInvalid ||shiftInvalid || scaleInvalid);
         });
         shiftField.setTextFormatter(new TextFormatter<>(new NumberStringConverter(nf)));
         shiftField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -58,7 +58,7 @@ public class ShiftTab extends ParametersTab {
             } else {
                 shiftField.getStyleClass().add("error");
             }
-            setIsInvalid(startInvalid || endInvalid ||shiftInvalid || scaleInvalid);
+            setInvalid(startInvalid || endInvalid ||shiftInvalid || scaleInvalid);
         });
         scaleField.setTextFormatter(new TextFormatter<>(new NumberStringConverter(nf)));
         scaleField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -68,7 +68,7 @@ public class ShiftTab extends ParametersTab {
             } else {
                 scaleField.getStyleClass().add("error");
             }
-            setIsInvalid(startInvalid || endInvalid ||shiftInvalid || scaleInvalid);
+            setInvalid(startInvalid || endInvalid ||shiftInvalid || scaleInvalid);
         });
     }
 
@@ -76,7 +76,7 @@ public class ShiftTab extends ParametersTab {
     public ArrayList<Line> generateResult() {
         Line line = new Line(getInputLine());
         ArrayList<Line> list = new ArrayList<>();
-        SimpleTransforms.shift(line,
+        SimpleTransforms.INSTANCE.shift(line,
                 Double.parseDouble(startField.getText()),
                 Double.parseDouble(endField.getText()),
                 Double.parseDouble(shiftField.getText()),
