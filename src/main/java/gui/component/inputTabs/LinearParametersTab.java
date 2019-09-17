@@ -8,6 +8,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.util.converter.NumberStringConverter;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class LinearParametersTab extends ParametersTab {
     @FXML
@@ -24,7 +25,7 @@ public class LinearParametersTab extends ParametersTab {
         this.setText("Линейный");
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setGroupingUsed(false);
-        loadFxml(getClass().getResource("LinearParametersTab.fxml"),this);
+        loadFxml(LinearParametersTab.class.getResource("LinearParametersTab.fxml"),this);
         angleField.setTextFormatter(new TextFormatter<>(new NumberStringConverter(nf)));
         angleField.textProperty().addListener((observable, oldValue, newValue) -> {
             angleInvalid = newValue.length() == 0;
@@ -59,8 +60,10 @@ public class LinearParametersTab extends ParametersTab {
     }
 
     @Override
-    public Line generateResult() {
-        return TrendLine.Linear(Integer.parseUnsignedInt(dotsField.getText()),
-                Double.parseDouble(angleField.getText()),Double.parseDouble(offsetField.getText()));
+    public ArrayList<Line> generateResult() {
+        ArrayList<Line> list = new ArrayList<>();
+        list.add(TrendLine.Linear(Integer.parseUnsignedInt(dotsField.getText()),
+                Double.parseDouble(angleField.getText()),Double.parseDouble(offsetField.getText())));
+        return list;
     }
 }

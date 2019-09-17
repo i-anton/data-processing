@@ -8,6 +8,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.util.converter.NumberStringConverter;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class ExponentialParametersTab extends ParametersTab {
     @FXML
@@ -24,7 +25,7 @@ public class ExponentialParametersTab extends ParametersTab {
         this.setText("Экспонента");
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setGroupingUsed(false);
-        loadFxml(getClass().getResource("ExponentialParametersTab.fxml"),this);
+        loadFxml(ExponentialParametersTab.class.getResource("ExponentialParametersTab.fxml"),this);
         koefField.setTextFormatter(new TextFormatter<>(new NumberStringConverter(nf)));
         koefField.textProperty().addListener((observable, oldValue, newValue) -> {
             koefInvalid = newValue.length() == 0;
@@ -59,8 +60,10 @@ public class ExponentialParametersTab extends ParametersTab {
     }
 
     @Override
-    public Line generateResult() {
-        return TrendLine.Exponential(Integer.parseUnsignedInt(dotsField.getText()),
-                Double.parseDouble(koefField.getText()),Double.parseDouble(degreeField.getText()));
+    public ArrayList<Line> generateResult() {
+        ArrayList<Line> list = new ArrayList<>();
+        list.add(TrendLine.Exponential(Integer.parseUnsignedInt(dotsField.getText()),
+                Double.parseDouble(koefField.getText()),Double.parseDouble(degreeField.getText())));
+        return list;
     }
 }

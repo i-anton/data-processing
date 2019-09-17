@@ -2,7 +2,6 @@ package gui.component.transformTabs;
 
 import data.Line;
 import data.model.SimpleTransforms;
-import data.model.TrendLine;
 import gui.component.inputTabs.ParametersTab;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -10,6 +9,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.util.converter.NumberStringConverter;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class SpikesTab extends ParametersTab {
     @FXML
@@ -62,12 +62,14 @@ public class SpikesTab extends ParametersTab {
     }
 
     @Override
-    public Line generateResult() {
+    public ArrayList<Line> generateResult() {
         Line line = new Line(getInputLine());
-        SimpleTransforms.Spikes(line,
+        var list = new ArrayList<Line>();
+        SimpleTransforms.spikes(line,
                 Integer.parseInt(seedField.getText()),
                 Integer.parseInt(spikeField.getText()),
                 Double.parseDouble(scaleField.getText()));
-        return line;
+        list.add(line);
+        return list;
     }
 }

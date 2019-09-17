@@ -8,6 +8,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.util.converter.NumberStringConverter;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class PiecewiseParametersTab extends ParametersTab {
     @FXML
@@ -22,7 +23,7 @@ public class PiecewiseParametersTab extends ParametersTab {
         this.setText("Кусочный");
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setGroupingUsed(false);
-        loadFxml(getClass().getResource("PiecewiseParametersTab.fxml"),this);
+        loadFxml(PiecewiseParametersTab.class.getResource("PiecewiseParametersTab.fxml"),this);
         stepField.setTextFormatter(new TextFormatter<>(new NumberStringConverter(nf)));
         stepField.textProperty().addListener((observable, oldValue, newValue) -> {
             stepInvalid = newValue.length() == 0;
@@ -47,8 +48,10 @@ public class PiecewiseParametersTab extends ParametersTab {
     }
 
     @Override
-    public Line generateResult() {
-        return TrendLine.Piecewise(Integer.parseUnsignedInt(dotsField.getText()),
-                Double.parseDouble(stepField.getText()));
+    public ArrayList<Line> generateResult() {
+        ArrayList<Line> list = new ArrayList<>();
+        list.add(TrendLine.Piecewise(Integer.parseUnsignedInt(dotsField.getText()),
+                Double.parseDouble(stepField.getText())));
+        return list;
     }
 }

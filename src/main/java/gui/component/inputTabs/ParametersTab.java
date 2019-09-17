@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 @DefaultProperty("extension")
 abstract public class ParametersTab extends Tab {
@@ -43,7 +44,7 @@ abstract public class ParametersTab extends Tab {
     public final void setIsInvalid(boolean value) { isInvalid.set(value);}
     public final ReadOnlyBooleanProperty isInvalidProperty() { return isInvalid.getReadOnlyProperty(); }
 
-    public abstract Line generateResult();
+    public abstract ArrayList<Line> generateResult();
 
     public ParametersTab()
     {

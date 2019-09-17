@@ -9,6 +9,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.util.converter.NumberStringConverter;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class NormalizeTab extends ParametersTab {
     @FXML
@@ -35,10 +36,12 @@ public class NormalizeTab extends ParametersTab {
     }
 
     @Override
-    public Line generateResult() {
+    public ArrayList<Line> generateResult() {
         Line line = new Line(getInputLine());
-        SimpleTransforms.Normalize(line,
+        ArrayList<Line> list = new ArrayList<>();
+        SimpleTransforms.normalize(line,
                 Double.parseDouble(scaleField.getText()));
-        return line;
+        list.add(line);
+        return list;
     }
 }

@@ -6,10 +6,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="gui.FXMLController">
     <center>
-        <GridPane prefHeight="400.0" prefWidth="600.0" alignment="center" hgap="10" vgap="10">
+        <GridPane alignment="center" hgap="10" vgap="10">
             <XYChart fx:id="firstChart" GridPane.columnIndex="0" GridPane.rowIndex="0" />
             <XYChart fx:id="secondChart" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
             <XYChart fx:id="thirdChart" GridPane.columnIndex="0" GridPane.rowIndex="1" />
@@ -17,23 +18,25 @@
         </GridPane>
     </center>
     <right>
-        <VBox>
-            <TitledPane text="Входные данные" expanded="true">
-                <VBox>
-                    <Label text="Место вставки:"/>
-                    <ComboBox fx:id="generateToCombo" />
-                    <TabPane fx:id="parameterTabs" />
-                </VBox>
-            </TitledPane>
-            <TitledPane text="Преобразования" expanded="true">
-                <VBox>
-                    <Label text="Данные из:" />
-                    <ComboBox fx:id="transformFromCombo"/>
-                    <Label text="Вставить в:" />
-                    <ComboBox fx:id="transformToCombo"/>
-                    <TabPane fx:id="transformTabs" disable="true"/>
-                </VBox>
-            </TitledPane>
-        </VBox>
+        <ScrollPane>
+            <VBox>
+                <TitledPane text="Входные данные">
+                    <VBox>
+                        <Label text="Место вставки:"/>
+                        <ComboBox fx:id="generateToCombo" />
+                        <TabPane fx:id="parameterTabs" />
+                    </VBox>
+                </TitledPane>
+                <TitledPane text="Преобразования">
+                    <VBox>
+                        <Label text="Данные из:" />
+                        <ComboBox fx:id="transformFromCombo"/>
+                        <Label text="Вставить в:" />
+                        <ComboBox fx:id="transformToCombo"/>
+                        <TabPane fx:id="transformTabs" disable="true"/>
+                    </VBox>
+                </TitledPane>
+            </VBox>
+        </ScrollPane>
     </right>
 </BorderPane>

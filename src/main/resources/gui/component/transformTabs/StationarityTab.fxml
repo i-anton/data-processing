@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import gui.component.inputTabs.ParametersTab?>
+<?import javafx.scene.control.*?>
+<fx:root xmlns:fx="http://javafx.com/fxml" type="ParametersTab"
+         xmlns="http://javafx.com/javafx">
+    <Label text="Количество интервалов"/>
+    <TextField fx:id="intervalsField"/>
+    <Label text="Погрешность"/>
+    <TextField fx:id="errorField"/>
+</fx:root>

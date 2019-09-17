@@ -28,7 +28,7 @@ public class TrendLine {
         for (int i = 0; i <dots; i++) {
             double si = stepSize*i;
             line.setX(i,si);
-            double value = 0.0;
+            double value;
             if (si < 20) value = (si-10)*(si-10);
             else if (si < 40) value = -5*((si - 30)*(si-30)-120);
             else value = 2.5*si;

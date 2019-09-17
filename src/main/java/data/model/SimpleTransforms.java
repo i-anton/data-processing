@@ -5,7 +5,7 @@ import data.Line;
 import java.util.Random;
 
 public class SimpleTransforms {
-    public static void Normalize(Line line, double scale){
+    public static void normalize(Line line, double scale){
         double minVal = line.getY(0);
         double maxVal = line.getY(0);
         final int size = line.getSize();
@@ -21,7 +21,7 @@ public class SimpleTransforms {
         }
     }
 
-    public static void Spikes(Line line, int seed, int spikeNum, double scale){
+    public static void spikes(Line line, int seed, int spikeNum, double scale){
         final Random rnd = new Random(seed);
         final int size = line.getSize();
         final double halfScale = scale/2.0;
@@ -40,7 +40,7 @@ public class SimpleTransforms {
         }
     }
 
-    public static void Shift(Line line, double start, double end, double shift, double scale){
+    public static void shift(Line line, double start, double end, double shift, double scale){
         final int size = line.getSize();
         int i = 0;
         double curr = line.getX(i);

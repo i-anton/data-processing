@@ -9,6 +9,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.util.converter.NumberStringConverter;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class ShiftTab extends ParametersTab {
     @FXML
@@ -72,13 +73,15 @@ public class ShiftTab extends ParametersTab {
     }
 
     @Override
-    public Line generateResult() {
+    public ArrayList<Line> generateResult() {
         Line line = new Line(getInputLine());
-        SimpleTransforms.Shift(line,
+        ArrayList<Line> list = new ArrayList<>();
+        SimpleTransforms.shift(line,
                 Double.parseDouble(startField.getText()),
                 Double.parseDouble(endField.getText()),
                 Double.parseDouble(shiftField.getText()),
                 Double.parseDouble(scaleField.getText()));
-        return line;
+        list.add(line);
+        return list;
     }
 }

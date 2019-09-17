@@ -3,11 +3,11 @@ package gui;
 import data.Line;
 import de.gsi.chart.XYChart;
 import de.gsi.dataset.spi.DoubleDataSet;
-import gui.component.inputTabs.ParametersTab;
 import gui.component.inputTabs.*;
 import gui.component.transformTabs.NormalizeTab;
 import gui.component.transformTabs.ShiftTab;
 import gui.component.transformTabs.SpikesTab;
+import gui.component.transformTabs.StationarityTab;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -37,7 +37,7 @@ public class FXMLController implements Initializable {
     @FXML
     private ComboBox<Integer> transformToCombo;
 
-    private Line[] lines;
+    private ArrayList[] lines;
     private XYChart[] charts;
 
     private ArrayList<ParametersTab> inputParameters;
@@ -53,19 +53,25 @@ public class FXMLController implements Initializable {
     private void addToInputParameters(final ParametersTab comp) {
         inputParameters.add(comp);
         comp.setOnApplyClicked((e)->{
-            final var dataSet = new DoubleDataSet("Вход");
             final Integer selectedIdx = generateToCombo.getSelectionModel()
                     .getSelectedItem();
             var chart = charts[selectedIdx];
-            chart.getDatasets().clear();
-            chart.getDatasets().add(dataSet);
             lines[selectedIdx] = comp.generateResult();
-            lines[selectedIdx].addToDataset(dataSet);
+            addToDataset(lines[selectedIdx], chart);
 
             if (!transformFromCombo.getItems().contains(selectedIdx)){
                 transformFromCombo.getItems().add(selectedIdx);
             }
         });
+    }
+    private void addToDataset(ArrayList<Line> lines, XYChart chart){
+        chart.getDatasets().clear();
+        int i = 0;
+        for (Line l : lines){
+            DoubleDataSet set = new DoubleDataSet(Integer.toString(i));
+            l.addToDataset(set);
+            chart.getDatasets().add(set);
+        }
     }
     private void addToTransformParameters(final ParametersTab comp) {
         transformParameters.add(comp);
@@ -75,17 +81,16 @@ public class FXMLController implements Initializable {
                     .getSelectedItem();
             final Integer selectedToIdx = transformToCombo.getSelectionModel()
                     .getSelectedItem();
+            comp.setInputLine((Line) lines[selectedFromIdx].get(0));
             var chart = charts[selectedToIdx];
-            chart.getDatasets().clear();
-            chart.getDatasets().add(dataSet);
-            comp.setInputLine(lines[selectedFromIdx]);
+
             lines[selectedToIdx] = comp.generateResult();
-            lines[selectedToIdx].addToDataset(dataSet);
+            addToDataset(lines[selectedToIdx], chart);
         });
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        lines = new Line[4];
+        lines = new ArrayList[4];
         charts = new XYChart[4];
         charts[0] = firstChart;
         charts[1] = secondChart;
@@ -99,20 +104,23 @@ public class FXMLController implements Initializable {
         addToInputParameters(new MyRandomParametersTab());
         parameterTabs.getTabs().addAll(inputParameters);
         generateToCombo.getItems().addAll(0,1);
+        generateToCombo.getSelectionModel().select(0);
         transformToCombo.valueProperty().addListener((e, oldVal, newVal)->{
             if (newVal != null && newVal.equals(oldVal)) return;
             transformTabs.setDisable(transformFromCombo.getValue() == null);
         });
         transformToCombo.getItems().addAll(2,3);
+        transformToCombo.getSelectionModel().select(0);
         transformFromCombo.valueProperty().addListener((e, oldVal, newVal)->{
             if (newVal != null && newVal.equals(oldVal)) return;
-            transformTabs.setDisable(transformToCombo.getValue() == null);
+            transformTabs.setDisable(false);
         });
 
         transformParameters = new ArrayList<>();
         addToTransformParameters(new NormalizeTab());
         addToTransformParameters(new ShiftTab());
         addToTransformParameters(new SpikesTab());
+        addToTransformParameters(new StationarityTab());
         transformTabs.getTabs().addAll(transformParameters);
 
         addPlugins(firstChart,secondChart,thirdChart,fourthChart);

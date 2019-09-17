@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class RandomParametersTab extends ParametersTab {
     @FXML
@@ -21,7 +22,7 @@ public class RandomParametersTab extends ParametersTab {
         this.setText("Cлучайный");
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setGroupingUsed(false);
-        loadFxml(getClass().getResource("RandomParametersTab.fxml"),this);
+        loadFxml(RandomParametersTab.class.getResource("RandomParametersTab.fxml"),this);
         dotsField.setTextFormatter(new TextFormatter<>(change ->
                 (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null)); //accept only unsigned integer
         dotsField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -47,8 +48,10 @@ public class RandomParametersTab extends ParametersTab {
     }
 
     @Override
-    public Line generateResult() {
-        return TrendLine.Random(Integer.parseUnsignedInt(dotsField.getText()),
-                Integer.parseInt(seedField.getText()));
+    public ArrayList<Line> generateResult() {
+        ArrayList<Line> list = new ArrayList<>();
+        list.add(TrendLine.Random(Integer.parseUnsignedInt(dotsField.getText()),
+                Integer.parseInt(seedField.getText())));
+        return list;
     }
 }
