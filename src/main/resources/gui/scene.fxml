@@ -24,7 +24,7 @@
                     <VBox>
                         <Label text="Место вставки:"/>
                         <ComboBox fx:id="generateToCombo" />
-                        <TabPane fx:id="parameterTabs" />
+                        <TabPane fx:id="inputsTabs" />
                     </VBox>
                 </TitledPane>
                 <TitledPane text="Преобразования">

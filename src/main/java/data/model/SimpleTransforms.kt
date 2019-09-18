@@ -5,7 +5,7 @@ import data.Line
 import java.util.Random
 
 object SimpleTransforms {
-    fun normalize(line: Line, scale: Double) {
+    fun normalize(line: Line, scale: Double) : Line {
         var minVal = line.getY(0)
         var maxVal = line.getY(0)
         val size = line.size
@@ -19,9 +19,10 @@ object SimpleTransforms {
             curr = scale * ((curr - minVal) / (maxVal - minVal) - 0.5)
             line.setY(i, curr)
         }
+        return line
     }
 
-    fun spikes(line: Line, seed: Int, spikeNum: Int, scale: Double) {
+    fun spikes(line: Line, seed: Int, spikeNum: Int, scale: Double) : Line {
         val rnd = Random(seed.toLong())
         val size = line.size
         val halfScale = scale * 0.5
@@ -38,9 +39,10 @@ object SimpleTransforms {
             }
             line.setY(spikeIdx, value + value * scale)
         }
+        return line
     }
 
-    fun shift(line: Line, start: Double, end: Double, shift: Double, scale: Double) {
+    fun shift(line: Line, start: Double, end: Double, shift: Double, scale: Double) : Line{
         val size = line.size
         var i = 0
         var curr = line.getX(i)
@@ -49,10 +51,11 @@ object SimpleTransforms {
             curr = line.getX(i)
         }
         while (i < size && curr < end) {
-            val `val` = line.getY(i)
+            val value = line.getY(i)
             curr = line.getX(i)
-            line.setY(i, (`val` + shift) * scale)
+            line.setY(i, (value + shift) * scale)
             i++
         }
+        return line
     }
 }

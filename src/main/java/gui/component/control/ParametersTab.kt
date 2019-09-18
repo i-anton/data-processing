@@ -1,8 +1,8 @@
-package gui.component.inputTabs
+package gui.component.control
 
 import data.Line
 import javafx.beans.DefaultProperty
-import javafx.beans.property.ReadOnlyBooleanWrapper
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.ObservableList
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
@@ -14,42 +14,34 @@ import javafx.scene.control.Tab
 import javafx.scene.layout.VBox
 import java.io.IOException
 import java.net.URL
-import java.util.*
 
 @DefaultProperty("extension")
-abstract class ParametersTab : Tab() {
-
+abstract class ParametersTab(text: String) : Tab(text) {
     @FXML
     private lateinit var extension: VBox
 
     @FXML
     private lateinit var applyButton: Button
-    private var onApplyClicked: EventHandler<ActionEvent>? = null
+    var onApplyClicked: EventHandler<ActionEvent>? = null
+        set(value){
+            field = value
+            applyButton.onAction = onApplyClicked
+        }
 
     var inputLine: Line? = null
 
-    private val isInvalidField = ReadOnlyBooleanWrapper(this, "isInvalid", true)
-    protected var isInvalid: Boolean
-        get() = isInvalidField.get()
-        set(value) { isInvalidField.value = value }
+    val isInvalidField = SimpleBooleanProperty(this, "isInvalid", true)
 
     init {
         loadFxml(ParametersTab::class.java.getResource("ParametersTab.fxml"), this)
         applyButton.disableProperty().bind(isInvalidField)
     }
 
-    fun getExtension(): ObservableList<Node> {
-        return extension.children
-    }
+    fun getExtension(): ObservableList<Node> = extension.children
 
-    fun setOnApplyClicked(onApplyClicked: EventHandler<ActionEvent>) {
-        this.onApplyClicked = onApplyClicked
-        applyButton.onAction = onApplyClicked
-    }
+    abstract fun generateResult(): List<Line>
 
-    abstract fun generateResult(): ArrayList<Line>
-
-    protected fun loadFxml(fxmlFile: URL, rootController: Any) {
+    private fun loadFxml(fxmlFile: URL, rootController: Any) {
         val loader = FXMLLoader(fxmlFile)
         loader.setController(rootController)
         loader.setRoot(rootController)

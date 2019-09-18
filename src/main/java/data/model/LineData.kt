@@ -4,7 +4,7 @@ import data.Line
 
 import java.util.Random
 
-object TrendLine {
+object LineData {
     fun linear(dots: Int, angle: Double, offset: Double): Line {
         val line = Line(dots)
         for (i in 0 until dots) {
@@ -14,7 +14,7 @@ object TrendLine {
         return line
     }
 
-    fun exponential(dots: Int, koef: Double, degree: Double): Line {
+    fun exponent(dots: Int, koef: Double, degree: Double): Line {
         val line = Line(dots)
         for (i in 0 until dots) {
             line.setX(i, i.toDouble())
