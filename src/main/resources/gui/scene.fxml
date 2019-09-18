@@ -7,18 +7,16 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="gui.FXMLController">
-    <center>
-        <GridPane alignment="center" hgap="10" vgap="10">
-            <XYChart fx:id="firstChart" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            <XYChart fx:id="secondChart" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-            <XYChart fx:id="thirdChart" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-            <XYChart fx:id="fourthChart" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+<?import javafx.scene.control.SplitPane?>
+<SplitPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+           fx:controller="gui.FXMLController" >
+        <GridPane alignment="center" maxWidth="Infinity" maxHeight="Infinity" hgap="10" vgap="10">
+            <XYChart fx:id="firstChart" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS"/>
+            <XYChart fx:id="secondChart" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS"/>
+            <XYChart fx:id="thirdChart" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS"/>
+            <XYChart fx:id="fourthChart" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS"/>
         </GridPane>
-    </center>
-    <right>
-        <ScrollPane>
+        <ScrollPane hbarPolicy="NEVER" fitToWidth="true">
             <VBox>
                 <TitledPane text="Входные данные">
                     <VBox>
@@ -38,5 +36,4 @@
                 </TitledPane>
             </VBox>
         </ScrollPane>
-    </right>
-</BorderPane>
+</SplitPane>

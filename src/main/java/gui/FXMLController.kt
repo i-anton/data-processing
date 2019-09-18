@@ -36,7 +36,7 @@ class FXMLController : Initializable {
     @FXML
     private lateinit var transformToCombo: ComboBox<String>
 
-    private var lines = arrayOfNulls<List<Line>?>(4)
+    private var lines = arrayOf(emptyList<Line>(), emptyList(), emptyList(), emptyList())
     private lateinit var charts: Array<XYChart>
 
     private var inputParameters = listOf(LinearParametersTab(),
@@ -65,7 +65,7 @@ class FXMLController : Initializable {
                         .selectedItem.toInt()
                 val chart = charts[selectedIdx]
                 lines[selectedIdx] = comp.generateResult()
-                addToDataset(lines[selectedIdx]!!, chart)
+                addToDataset(lines[selectedIdx], chart)
 
                 if (!transformFromCombo.items.contains(selectedIdx.toString())) {
                     transformFromCombo.items.add(selectedIdx.toString())
@@ -93,18 +93,17 @@ class FXMLController : Initializable {
                         .selectedItem.toInt()
                 val selectedToIdx = transformToCombo.selectionModel
                         .selectedItem.toInt()
-                comp.inputLine = lines[selectedFromIdx]!![0]
+                comp.inputLine = lines[selectedFromIdx][0]
                 val chart = charts[selectedToIdx]
                 lines[selectedToIdx] = comp.generateResult()
-                addToDataset(lines[selectedToIdx]!!, chart)
+                addToDataset(lines[selectedToIdx], chart)
             }
         }
         transformTabs.tabs.addAll(transformParameters)
         transformToCombo.items.addAll("2", "3")
         transformToCombo.selectionModel.select(0)
-        transformFromCombo.valueProperty().addListener { _, _, newVal ->
-            if (newVal != null) transformTabs.isDisable = false
-        }
+        transformTabs.disableProperty().bind(transformFromCombo.selectionModel
+                .selectedItemProperty().isNull)
     }
 
     override fun initialize(url: URL, rb: ResourceBundle?) {

@@ -1,23 +1,23 @@
 package data.model
 
 import data.Line
+import java.lang.Integer.max
+import java.lang.Integer.min
 
 import java.util.Random
 
 object SimpleTransforms {
     fun normalize(line: Line, scale: Double) : Line {
-        var minVal = line.getY(0)
-        var maxVal = line.getY(0)
+        var minVal = line.ys[0]
+        var maxVal = line.ys[0]
         val size = line.size
         for (i in 1 until size) {
-            val curr = line.getY(i)
+            val curr = line.ys[i]
             if (curr > maxVal) maxVal = curr
             if (curr < minVal) minVal = curr
         }
         for (i in 0 until size) {
-            var curr = line.getY(i)
-            curr = scale * ((curr - minVal) / (maxVal - minVal) - 0.5)
-            line.setY(i, curr)
+            line.ys[i] = scale * ((line.ys[i] - minVal) / (maxVal - minVal) - 0.5)
         }
         return line
     }
@@ -25,36 +25,28 @@ object SimpleTransforms {
     fun spikes(line: Line, seed: Int, spikeNum: Int, scale: Double) : Line {
         val rnd = Random(seed.toLong())
         val size = line.size
-        val halfScale = scale * 0.5
         for (i in spikeNum downTo 1) {
             val spikeIdx = rnd.nextInt(size)
-            val value = line.getY(spikeIdx)
-            if (spikeIdx != 0) {
-                val y = line.getY(spikeIdx - 1)
-                line.setY(spikeIdx - 1, y + y * halfScale)
+            for (j in max(spikeIdx-1,0) until min(spikeIdx+1, size)){
+                val y = line.ys[j]
+                line.ys[spikeIdx - 1] = y + y * scale
             }
-            if (spikeIdx != size) {
-                val y = line.getY(spikeIdx + 1)
-                line.setY(spikeIdx + 1, y + y * halfScale)
-            }
-            line.setY(spikeIdx, value + value * scale)
         }
         return line
     }
 
     fun shift(line: Line, start: Double, end: Double, shift: Double, scale: Double) : Line{
-        val size = line.size
-        var i = 0
-        var curr = line.getX(i)
-        while (i < size && curr < start) {
-            i++
-            curr = line.getX(i)
+        var startIdx = -1
+        for (i in 0 until line.size){
+            if (line.xs[i] >= start) {
+                startIdx = i
+                break
+            }
         }
-        while (i < size && curr < end) {
-            val value = line.getY(i)
-            curr = line.getX(i)
-            line.setY(i, (value + shift) * scale)
-            i++
+        if (startIdx == -1) return line
+        for (i in startIdx until line.size){
+            if (line.xs[i] > end) break
+            line.ys[i] = line.ys[i] * scale + shift
         }
         return line
     }

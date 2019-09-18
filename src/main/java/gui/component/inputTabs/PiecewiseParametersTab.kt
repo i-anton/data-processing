@@ -7,8 +7,8 @@ import gui.component.control.ValidatableTextField
 import gui.component.or
 
 class PiecewiseParametersTab : ParametersTab("Кусочный") {
-    private val dots: ValidatableTextField = ValidatableTextField("Всего точек", TextFieldFormat.UINT)
-    private val step: ValidatableTextField = ValidatableTextField("Шаг", TextFieldFormat.DOUBLE)
+    private val dots = ValidatableTextField("Всего точек", TextFieldFormat.UINT)
+    private val step = ValidatableTextField("Шаг", TextFieldFormat.DOUBLE)
 
     init {
         getExtension().addAll(dots, step)

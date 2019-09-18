@@ -9,7 +9,6 @@ import javafx.util.converter.NumberStringConverter
 import java.text.NumberFormat
 
 class ValidatableTextField(name: String, fieldFormat: TextFieldFormat) : VBox(), IValidatable {
-
     private val textField = TextField()
     val isInvalidProp = ReadOnlyBooleanWrapper(this, "isInvalid", true)
 

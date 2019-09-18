@@ -19,7 +19,6 @@ import java.net.URL
 abstract class ParametersTab(text: String) : Tab(text) {
     @FXML
     private lateinit var extension: VBox
-
     @FXML
     private lateinit var applyButton: Button
     var onApplyClicked: EventHandler<ActionEvent>? = null
@@ -28,7 +27,7 @@ abstract class ParametersTab(text: String) : Tab(text) {
             applyButton.onAction = onApplyClicked
         }
 
-    var inputLine: Line? = null
+    lateinit var inputLine: Line
 
     val isInvalidField = SimpleBooleanProperty(this, "isInvalid", true)
 
@@ -50,6 +49,5 @@ abstract class ParametersTab(text: String) : Tab(text) {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
     }
 }

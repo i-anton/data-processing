@@ -20,7 +20,7 @@ class SpikesTab : ParametersTab("Пики") {
     }
 
     override fun generateResult() = listOf(
-            SimpleTransforms.spikes(Line(inputLine!!), seed.text.toInt(),
+            SimpleTransforms.spikes(Line(inputLine), seed.text.toInt(),
                     spike.text.toInt(), scale.text.toDouble())
     )
 }

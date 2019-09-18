@@ -14,5 +14,5 @@ class NormalizeTab : ParametersTab("Нормализация") {
     }
 
     override fun generateResult() =
-            listOf(SimpleTransforms.normalize(Line(inputLine!!), java.lang.Double.parseDouble(scale.text)))
+            listOf(SimpleTransforms.normalize(Line(inputLine), scale.text.toDouble()))
 }

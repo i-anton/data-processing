@@ -13,10 +13,9 @@ class StationarityTab : ParametersTab("Анализ стационарности
 
     init {
         getExtension().addAll(intervals,error)
-        isInvalidField.bind(intervals.isInvalidProp
-                or error.isInvalidProp)
+        isInvalidField.bind(intervals.isInvalidProp or error.isInvalidProp)
     }
 
-    override fun generateResult() = Stationary.dataPerInterval(inputLine!!,
+    override fun generateResult() = Stationary.dataPerInterval(inputLine,
             intervals.text.toInt(), error.text.toDouble())
 }

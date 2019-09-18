@@ -3,24 +3,12 @@ package data
 import de.gsi.dataset.spi.DoubleDataSet
 
 class Line private constructor(
-        private var xs: DoubleArray,
-        private var ys: DoubleArray
+        var xs: DoubleArray,
+        var ys: DoubleArray
 ) {
     val size get() = xs.size
-
     constructor(other: Line) : this(other.xs.clone(), other.ys.clone())
-
     constructor(size: Int) : this(DoubleArray(size), DoubleArray(size))
-
-    fun getX(index: Int) = xs[index]
-    fun setX(index: Int, value: Double) {
-        xs[index] = value
-    }
-
-    fun getY(index: Int) = ys[index]
-    fun setY(index: Int, value: Double) {
-        ys[index] = value
-    }
 
     fun addToDataset(dataSet: DoubleDataSet) {
         dataSet.setAutoNotifaction(false)

@@ -3,13 +3,14 @@ package data.model
 import data.Line
 
 import java.util.Random
+import kotlin.math.exp
 
 object LineData {
     fun linear(dots: Int, angle: Double, offset: Double): Line {
         val line = Line(dots)
         for (i in 0 until dots) {
-            line.setX(i, i.toDouble())
-            line.setY(i, angle * i + offset)
+            line.xs[i] = i.toDouble()
+            line.ys[i] = angle * i + offset
         }
         return line
     }
@@ -17,8 +18,8 @@ object LineData {
     fun exponent(dots: Int, koef: Double, degree: Double): Line {
         val line = Line(dots)
         for (i in 0 until dots) {
-            line.setX(i, i.toDouble())
-            line.setY(i, koef * Math.exp(degree * i))
+            line.xs[i] = i.toDouble()
+            line.ys[i] = koef * exp(degree * i)
         }
         return line
     }
@@ -27,15 +28,14 @@ object LineData {
         val line = Line(dots)
         for (i in 0 until dots) {
             val si = stepSize * i
-            line.setX(i, si)
+            line.xs[i] = si
             val value: Double
-            if (si < 20)
-                value = (si - 10) * (si - 10)
-            else if (si < 40)
-                value = -5 * ((si - 30) * (si - 30) - 120)
-            else
-                value = 2.5 * si
-            line.setY(i, value)
+            value = when {
+                si < 20 -> (si - 10) * (si - 10)
+                si < 40 -> -5 * ((si - 30) * (si - 30) - 120)
+                else -> 2.5 * si
+            }
+            line.ys[i] = value
         }
 
         return line
@@ -45,8 +45,8 @@ object LineData {
         val line = Line(dots)
         val rnd = Random(seed.toLong())
         for (i in 0 until dots) {
-            line.setX(i, i.toDouble())
-            line.setY(i, rnd.nextDouble())
+            line.xs[i] = i.toDouble()
+            line.ys[i] = rnd.nextDouble()
         }
         return line
     }
@@ -55,8 +55,8 @@ object LineData {
         val line = Line(dots)
         val rnd = MyRandom(seed)
         for (i in 0 until dots) {
-            line.setX(i, i.toDouble())
-            line.setY(i, rnd.nextDouble())
+            line.xs[i] = i.toDouble()
+            line.ys[i] = rnd.nextDouble()
         }
         return line
     }
