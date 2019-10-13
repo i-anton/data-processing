@@ -1,11 +1,10 @@
 package gui.component.transformTabs
 
-import data.analysis.Stationary
-
-import gui.component.or
+import data.analysis.CompositeStatistics
+import gui.component.control.ParametersTab
 import gui.component.control.TextFieldFormat
 import gui.component.control.ValidatableTextField
-import gui.component.control.ParametersTab
+import gui.component.or
 
 class StationarityTab : ParametersTab("Анализ стационарности") {
     private val intervals = ValidatableTextField("Количество интервалов",TextFieldFormat.UINT)
@@ -16,6 +15,6 @@ class StationarityTab : ParametersTab("Анализ стационарности
         isInvalidField.bind(intervals.isInvalidProp or error.isInvalidProp)
     }
 
-    override fun generateResult() = Stationary.dataPerInterval(inputLine,
+    override fun generateResult() = CompositeStatistics.dataPerInterval(inputLine,
             intervals.text.toInt(), error.text.toDouble())
 }

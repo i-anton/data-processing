@@ -1,6 +1,6 @@
 package gui.component.inputTabs
 
-import data.model.LineData
+import data.input.LineGenerator
 import gui.component.control.ParametersTab
 import gui.component.control.TextFieldFormat
 import gui.component.control.ValidatableTextField
@@ -16,6 +16,6 @@ class PiecewiseParametersTab : ParametersTab("Кусочный") {
     }
 
     override fun generateResult() = listOf(
-            LineData.piecewise(dots.text.toInt(), step.text.toDouble())
+            LineGenerator.piecewise(dots.text.toInt(), step.text.toDouble())
     )
 }

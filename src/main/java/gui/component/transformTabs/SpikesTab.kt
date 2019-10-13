@@ -1,7 +1,7 @@
 package gui.component.transformTabs
 
 import data.Line
-import data.model.SimpleTransforms
+import data.model.SingleTransforms
 import gui.component.control.TextFieldFormat
 import gui.component.control.ValidatableTextField
 import gui.component.control.ParametersTab
@@ -20,7 +20,7 @@ class SpikesTab : ParametersTab("Пики") {
     }
 
     override fun generateResult() = listOf(
-            SimpleTransforms.spikes(Line(inputLine), seed.text.toInt(),
+            SingleTransforms.spikes(Line(inputLine), seed.text.toInt(),
                     spike.text.toInt(), scale.text.toDouble())
     )
 }

@@ -1,6 +1,6 @@
 package gui.component.inputTabs
 
-import data.model.LineData
+import data.input.LineGenerator
 import gui.component.control.ParametersTab
 import gui.component.or
 import gui.component.control.TextFieldFormat
@@ -19,6 +19,6 @@ class LinearParametersTab : ParametersTab("Линейный") {
     }
 
     override fun generateResult() = listOf(
-            LineData.linear(dots.text.toInt(), angle.text.toDouble(), offset.text.toDouble())
+            LineGenerator.linear(dots.text.toInt(), angle.text.toDouble(), offset.text.toDouble())
     )
 }

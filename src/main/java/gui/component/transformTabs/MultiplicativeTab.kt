@@ -6,7 +6,7 @@ import gui.component.control.TextFieldFormat
 import gui.component.control.ValidatableTextField
 import gui.component.control.ParametersTab
 
-class NormalizeTab : ParametersTab("Нормализация") {
+class MultiplicativeTab : ParametersTab("Мультипликативный") {
     private val scale = ValidatableTextField("Коэфициент масштаба",TextFieldFormat.DOUBLE)
     init {
         getExtension().add(scale)

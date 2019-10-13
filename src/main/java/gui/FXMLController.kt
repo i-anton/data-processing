@@ -81,7 +81,7 @@ class FXMLController : Initializable {
         chart.datasets.clear()
         for ((i, l) in lines.withIndex()) {
             val set = DoubleDataSet(i.toString())
-            l.addToDataset(set)
+            l.addToDataSet(set)
             chart.datasets.add(set)
         }
     }

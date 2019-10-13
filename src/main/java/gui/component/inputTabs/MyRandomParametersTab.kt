@@ -1,6 +1,6 @@
 package gui.component.inputTabs
 
-import data.model.LineData
+import data.input.LineGenerator
 import gui.component.control.ParametersTab
 import gui.component.or
 import gui.component.control.TextFieldFormat
@@ -16,6 +16,6 @@ class MyRandomParametersTab : ParametersTab("Cлучайный+") {
     }
 
     override fun generateResult() = listOf(
-            LineData.myRandom(dots.text.toInt(), seed.text.toInt())
+            LineGenerator.myRandom(dots.text.toInt(), seed.text.toInt())
     )
 }

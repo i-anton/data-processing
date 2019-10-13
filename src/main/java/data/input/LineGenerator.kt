@@ -1,11 +1,10 @@
-package data.model
+package data.input
 
 import data.Line
-
-import java.util.Random
+import java.util.*
 import kotlin.math.exp
 
-object LineData {
+object LineGenerator {
     fun linear(dots: Int, angle: Double, offset: Double): Line {
         val line = Line(dots)
         for (i in 0 until dots) {
@@ -37,21 +36,23 @@ object LineData {
             }
             line.ys[i] = value
         }
-
         return line
     }
 
-    fun random(dots: Int, seed: Int): Line {
+    fun anySeed() = System.nanoTime().toInt()
+
+    fun random(dots: Int, minVal: Double = 0.0,
+               maxVal: Double = 1.0, seed: Int = anySeed()): Line {
         val line = Line(dots)
         val rnd = Random(seed.toLong())
         for (i in 0 until dots) {
             line.xs[i] = i.toDouble()
-            line.ys[i] = rnd.nextDouble()
+            line.ys[i] = rnd.nextDouble() * (maxVal - minVal) + minVal
         }
         return line
     }
 
-    fun myRandom(dots: Int, seed: Int): Line {
+    fun myRandom(dots: Int, seed: Int = anySeed()): Line {
         val line = Line(dots)
         val rnd = MyRandom(seed)
         for (i in 0 until dots) {

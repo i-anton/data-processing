@@ -1,6 +1,8 @@
-package data.model
+package data.input
 
-class MyRandom(seed: Int) {
+import data.input.LineGenerator.anySeed
+
+class MyRandom(seed: Int = anySeed()) {
     private var prevValue = seed * 25923L
 
     fun nextDouble(): Double {
@@ -9,6 +11,6 @@ class MyRandom(seed: Int) {
         val rot = prevValue ushr 59
         value = (shift ushr rot.toInt()) or (shift shl (-rot.toInt() and 31))
         prevValue = value
-        return value.toDouble()
+        return value.toDouble() / Int.MAX_VALUE
     }
 }

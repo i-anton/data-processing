@@ -1,12 +1,11 @@
 package data.model
 
 import data.Line
-import java.lang.Integer.max
-import java.lang.Integer.min
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.random.Random
 
-import java.util.Random
-
-object SimpleTransforms {
+object SingleTransforms {
     fun normalize(line: Line, scale: Double) : Line {
         var minVal = line.ys[0]
         var maxVal = line.ys[0]

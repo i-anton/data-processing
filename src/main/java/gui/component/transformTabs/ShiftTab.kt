@@ -1,7 +1,7 @@
 package gui.component.transformTabs
 
 import data.Line
-import data.model.SimpleTransforms
+import data.model.SingleTransforms
 import gui.component.control.TextFieldFormat
 import gui.component.control.ValidatableTextField
 import gui.component.control.ParametersTab
@@ -22,7 +22,7 @@ class ShiftTab : ParametersTab("Cмещение") {
     }
 
     override fun generateResult() = listOf(
-            SimpleTransforms.shift(Line(inputLine), start.text.toDouble(),
+            SingleTransforms.shift(Line(inputLine), start.text.toDouble(),
                     end.text.toDouble(), shift.text.toDouble(), scale.text.toDouble())
     )
 }

@@ -1,6 +1,6 @@
 package gui.component.inputTabs
 
-import data.model.LineData
+import data.input.LineGenerator
 import gui.component.control.ParametersTab
 import gui.component.or
 import gui.component.control.TextFieldFormat
@@ -19,6 +19,6 @@ class ExponentParametersTab : ParametersTab("Экспонента") {
     }
 
     override fun generateResult() = listOf(
-            LineData.exponent(dots.text.toInt(), koef.text.toDouble(), degree.text.toDouble())
+            LineGenerator.exponent(dots.text.toInt(), koef.text.toDouble(), degree.text.toDouble())
     )
 }
