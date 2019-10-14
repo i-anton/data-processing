@@ -10,6 +10,10 @@ class Line private constructor(
 
     constructor(other: Line) : this(other.xs.clone(), other.ys.clone())
     constructor(size: Int) : this(DoubleArray(size), DoubleArray(size))
+    constructor(arrYs: DoubleArray) : this(DoubleArray(arrYs.size) { it.toDouble() }, arrYs)
+    constructor(arrYs: FloatArray) :
+            this(DoubleArray(arrYs.size) { it.toDouble() },
+            DoubleArray(arrYs.size) { arrYs[it].toDouble() })
 
     fun addToDataSet(dataSet: DoubleDataSet) {
         dataSet.setAutoNotifaction(false)
