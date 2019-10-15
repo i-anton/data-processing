@@ -1,6 +1,7 @@
 package data.analysis
 
 import data.Line
+import kotlin.math.abs
 import kotlin.math.min
 
 object CompositeStatistics {
@@ -16,7 +17,7 @@ object CompositeStatistics {
         for (i in 0 until intervalsCount) {
             endIdx = min(startIdx + pointsInInterval, size)
             dispResult.xs[i] = startIdx.toDouble()
-            dispResult.ys[i] = LineStatistics.variance(line, startIdx, endIdx)
+            dispResult.ys[i] = LineStatistics.disp(line, startIdx, endIdx)
             avgResult.xs[i] = startIdx.toDouble()
             avgResult.ys[i] = LineStatistics.avg(line, startIdx, endIdx)
             errorResult.xs[i] = startIdx.toDouble()
@@ -26,5 +27,26 @@ object CompositeStatistics {
         return listOf(dispResult, avgResult,errorResult)
     }
 
+    fun isStationary(line: Line, intervalCount: Int, deltaPercent: Double): Boolean {
+        val delta = LineStatistics.amplitude(line) * deltaPercent
+        val intervalSize = line.size / intervalCount
 
+        val disps = DoubleArray(intervalCount)
+        val avgs = DoubleArray(intervalCount)
+
+        for (intervalIdx in 0 until intervalCount){
+            val start = intervalIdx * intervalSize
+            val end = min(start + intervalSize,line.size)
+
+            disps[intervalIdx] = LineStatistics.disp(line, start, end)
+            avgs[intervalIdx] = LineStatistics.avg(line, start, end)
+        }
+
+        for (i in 0 until intervalCount-1) {
+            if ((abs(disps[i] - disps[i+1]) > delta) or
+                    (abs(avgs[i] - avgs[i+1]) > delta))
+                return true
+        }
+        return false
+    }
 }

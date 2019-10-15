@@ -13,7 +13,7 @@ object LineStatistics {
         return result / (endIdx - startIdx + 1)
     }
 
-    fun variance(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
+    fun disp(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
         var result = 0.0
         val avg = avg(line, startIdx, endIdx)
         for (i in startIdx until endIdx) {
@@ -23,7 +23,7 @@ object LineStatistics {
         return result / (endIdx - startIdx + 1)
     }
 
-    fun stdDev(line: Line, startIdx: Int = 0, endIdx: Int = line.size) = sqrt(variance(line, startIdx, endIdx))
+    fun stdDev(line: Line, startIdx: Int = 0, endIdx: Int = line.size) = sqrt(disp(line, startIdx, endIdx))
 
     fun amplitude(line: Line, startIdx: Int = 0, endIdx: Int = line.size) =
             max(line, startIdx, endIdx) - min(line, startIdx, endIdx)
@@ -88,7 +88,7 @@ object LineStatistics {
     fun midSquareError(line: Line, startIdx: Int = 0, endIdx: Int = line.size) = sqrt(midSquare(line, startIdx,endIdx))
 
     fun kurtosis(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
-        val variance = variance(line,startIdx,endIdx)
+        val variance = disp(line,startIdx,endIdx)
         val excess = excess(line,startIdx, endIdx)
         return (endIdx-startIdx+1)*(excess / (variance*variance))-3
     }
