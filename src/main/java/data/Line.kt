@@ -2,7 +2,7 @@ package data
 
 import de.gsi.dataset.spi.DoubleDataSet
 
-class Line private constructor(
+class Line constructor(
         var xs: DoubleArray,
         var ys: DoubleArray
 ) {

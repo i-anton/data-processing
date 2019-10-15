@@ -2,25 +2,39 @@ package data.analysis
 
 import data.Line
 import kotlin.math.abs
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 object LineStatistics {
-    fun avg(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
-        var result = 0.0
-        for (i in startIdx until endIdx) {
-            result += line.ys[i]
-        }
-        return result / (endIdx - startIdx + 1)
+    fun avg(line: Line, startIdx: Int = 0, endIdx: Int = line.size) =
+            (startIdx until endIdx).sumByDouble { line.ys[it] } / (endIdx - startIdx + 1)
+
+    fun stdAbsDev(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
+        val avg = avg(line, startIdx, endIdx)
+        return (startIdx until endIdx)
+                .sumByDouble { abs(line.ys[it] - avg) } /
+                (endIdx - startIdx + 1)
     }
 
     fun disp(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
-        var result = 0.0
         val avg = avg(line, startIdx, endIdx)
-        for (i in startIdx until endIdx) {
-            val value = line.ys[i] - avg
-            result += value * value
-        }
-        return result / (endIdx - startIdx + 1)
+        return (startIdx until endIdx)
+                .sumByDouble { (line.ys[it] - avg).pow(2) } /
+                (endIdx - startIdx + 1)
+    }
+
+    fun assimetry(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
+        val avg = avg(line, startIdx, endIdx)
+        return (startIdx until endIdx)
+                .sumByDouble { (line.ys[it] - avg).pow(3) } /
+                (endIdx - startIdx + 1)
+    }
+
+    fun excess(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
+        val avg = avg(line, startIdx, endIdx)
+        return (startIdx until endIdx)
+                .sumByDouble { (line.ys[it] - avg).pow(4) } /
+                (endIdx - startIdx + 1)
     }
 
     fun stdDev(line: Line, startIdx: Int = 0, endIdx: Int = line.size) = sqrt(disp(line, startIdx, endIdx))
@@ -46,50 +60,16 @@ object LineStatistics {
         return maxVal
     }
 
-    fun assimetry(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
-        var result = 0.0
-        val avg = avg(line, startIdx, endIdx)
-        for (i in startIdx until endIdx) {
-            val value = line.ys[i] - avg
-            result += value * value * value
-        }
-        return result / (endIdx - startIdx)
-    }
+    fun midSquare(line: Line, startIdx: Int = 0, endIdx: Int = line.size) =
+            (startIdx until endIdx)
+                    .sumByDouble { line.ys[it].pow(2) } /
+                    (endIdx - startIdx + 1)
 
-    fun excess(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
-        var result = 0.0
-        val avg = avg(line, startIdx, endIdx)
-        for (i in startIdx until endIdx) {
-            val value = line.ys[i] - avg
-            result += (value * value * value * value)
-        }
-        return result / (endIdx - startIdx + 1)
-    }
-
-    fun stdAbsDev(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
-        var result = 0.0
-        val avg = avg(line, startIdx, endIdx)
-        for (i in startIdx until endIdx) {
-            val value = line.ys[i] - avg
-            result += abs(value)
-        }
-        return result / (endIdx - startIdx + 1)
-    }
-
-    fun midSquare(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
-        var result = 0.0
-        for (i in startIdx until endIdx) {
-            val value = line.ys[i]
-            result += value*value
-        }
-        return result / (endIdx - startIdx)
-    }
-
-    fun midSquareError(line: Line, startIdx: Int = 0, endIdx: Int = line.size) = sqrt(midSquare(line, startIdx,endIdx))
+    fun midSquareError(line: Line, startIdx: Int = 0, endIdx: Int = line.size) = sqrt(midSquare(line, startIdx, endIdx))
 
     fun kurtosis(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
-        val variance = disp(line,startIdx,endIdx)
-        val excess = excess(line,startIdx, endIdx)
-        return (endIdx-startIdx+1)*(excess / (variance*variance))-3
+        val variance = disp(line, startIdx, endIdx)
+        val excess = excess(line, startIdx, endIdx)
+        return (endIdx - startIdx + 1) * (excess / (variance * variance)) - 3
     }
 }

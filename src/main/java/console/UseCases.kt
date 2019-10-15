@@ -1,5 +1,6 @@
 package console
 
+import data.Line
 import data.analysis.CompositeStatistics
 import data.analysis.LineStatistics
 import data.input.LineGenerator
@@ -9,9 +10,9 @@ import de.gsi.dataset.spi.DoubleDataSet
 import gui.ShowCase
 import javafx.application.Platform
 
-fun combineDemo(){
+fun combineDemo() {
     val linear = LineGenerator.linear(1000, -2.0, 0.0)
-    val random = LineGenerator.random(1000,-1000.0, 1000.0)
+    val random = LineGenerator.random(1000, -1000.0, 1000.0)
     val dataList = listOf(
             listOf(DoubleDataSet("Random").addLine(random)),
             listOf(DoubleDataSet("Add").addLine(Combine.additive(random, linear))),
@@ -36,8 +37,8 @@ fun combineAvgDemo() {
     Platform.startup {
         ShowCase().multi(combines).show()
     }
-    for (item in combinesRaw) {
-        println(LineStatistics.stdDev(item))
+    combinesRaw.forEach {
+        println(LineStatistics.stdDev(it))
     }
 }
 
@@ -45,4 +46,45 @@ fun stationarityDemo() {
     println(CompositeStatistics.isStationary(
             LineGenerator.random(100, -100.0, 100.0, 0),
             5, 0.05))
+}
+
+fun autoCorrelationDemo() {
+    val initial = Line(LineGenerator.linear(100, 1.0, 0.0))
+    val initialRand = LineGenerator.random(100)
+    val stats = CompositeStatistics.autoCorrelation(initial)
+    val statsRand = CompositeStatistics.autoCorrelation(initialRand)
+    Platform.startup {
+        ShowCase().multi(listOf(
+                listOf(DoubleDataSet("f(line)").addLine(stats)),
+                listOf(DoubleDataSet("line").addLine(initial)),
+                listOf(DoubleDataSet("f(random)").addLine(statsRand)),
+                listOf(DoubleDataSet("random").addLine(initialRand))
+        )
+        ).show()
+    }
+}
+
+fun harmonicDemo() {
+    /* 500 hz is limit*/
+    val frequencies = listOf(11.0, 110.0, 250.0, 510.0)
+    val dataList = frequencies.map {
+        listOf(DoubleDataSet("").addLine(
+                LineGenerator.harmonic(1000, 100.0, it))
+        )
+    }
+    Platform.startup {
+        ShowCase().multi(dataList).show()
+    }
+}
+
+fun dftDemo() {
+    val frequencies = listOf(11.0, 110.0, 250.0, 510.0)
+    val dataList = frequencies.map {
+        listOf(DoubleDataSet("").addLine(
+                CompositeStatistics.dft(LineGenerator.harmonic(1000, 100.0, it)))
+        )
+    }
+    Platform.startup {
+        ShowCase().multi(dataList).show()
+    }
 }

@@ -3,6 +3,7 @@ package data.input
 import data.Line
 import java.util.*
 import kotlin.math.exp
+import kotlin.math.sin
 
 object LineGenerator {
     fun linear(dots: Int, angle: Double, offset: Double): Line {
@@ -58,6 +59,15 @@ object LineGenerator {
         for (i in 0 until dots) {
             line.xs[i] = i.toDouble()
             line.ys[i] = rnd.nextDouble()
+        }
+        return line
+    }
+
+    fun harmonic(dots: Int, amplitude: Double, frequency: Double): Line {
+        val line = Line(dots)
+        for (i in 0 until dots) {
+            line.xs[i] = i.toDouble()
+            line.ys[i] = sin(2.0 * Math.PI * frequency * i * 0.001) * amplitude
         }
         return line
     }

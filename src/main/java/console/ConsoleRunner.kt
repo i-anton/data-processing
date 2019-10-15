@@ -4,10 +4,8 @@ import data.Line
 import data.input.LineGenerator
 import de.gsi.dataset.spi.DoubleDataSet
 
-
 fun main() {
-
-
+    dftDemo()
 }
 
 fun DoubleDataSet.addLine(line: Line): DoubleDataSet {
