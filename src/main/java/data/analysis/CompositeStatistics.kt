@@ -103,8 +103,7 @@ object CompositeStatistics {
 
     fun dft(line: Line): Line {
         val n = line.size
-        val arr = DoubleArray(n)
-        for (k in 0 until n) {
+        val arr = DoubleArray(n) { k ->
             var sumReal = 0.0
             var sumImag = 0.0
             for (t in 0 until n) {
@@ -112,7 +111,7 @@ object CompositeStatistics {
                 sumReal += line.ys[t] * cos(angle)
                 sumImag += line.ys[t] * sin(angle)
             }
-            arr[k] = sqrt(sumReal * sumReal + sumImag * sumImag)
+            sqrt(sumReal * sumReal + sumImag * sumImag)
         }
         return Line(arr)
     }

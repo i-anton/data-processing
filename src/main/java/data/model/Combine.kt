@@ -7,8 +7,6 @@ import java.util.function.BiFunction
 object Combine {
     fun additive(one: Line, other: Line) = lineCombine(one, other, BiFunction { x, y -> x + y })
 
-    fun subtractive(one: Line, other: Line) = lineCombine(one, other, BiFunction { x, y -> x - y })
-
     fun multiplicative(one: Line, other: Line) = lineCombine(one, other, BiFunction { x, y -> x * y })
 
     private fun average(lines: List<Line>): Line {

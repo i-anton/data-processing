@@ -25,7 +25,7 @@ fun combineDemo() {
             listOf(DoubleDataSet("Linear").addLine(linear))
     )
     Platform.startup {
-        ShowCase().multi(dataList).show()
+        ShowCase.multi(dataList).show()
     }
 }
 
@@ -40,7 +40,7 @@ fun combineAvgDemo() {
         listOf(DoubleDataSet("").addLine(it))
     }
     Platform.startup {
-        ShowCase().multi(combines).show()
+        ShowCase.multi(combines).show()
     }
     combinesRaw.forEach {
         println(LineStatistics.stdDev(it))
@@ -59,7 +59,7 @@ fun autoCorrelationDemo() {
     val stats = CompositeStatistics.autoCorrelation(initial)
     val statsRand = CompositeStatistics.autoCorrelation(initialRand)
     Platform.startup {
-        ShowCase().multi(listOf(
+        ShowCase.multi(listOf(
                 listOf(DoubleDataSet("f(line)").addLine(stats)),
                 listOf(DoubleDataSet("line").addLine(initial)),
                 listOf(DoubleDataSet("f(random)").addLine(statsRand)),
@@ -78,7 +78,7 @@ fun harmonicDemo() {
         )
     }
     Platform.startup {
-        ShowCase().multi(dataList).show()
+        ShowCase.multi(dataList).show()
     }
 }
 
@@ -90,7 +90,7 @@ fun dftDemo() {
         )
     }
     Platform.startup {
-        ShowCase().multi(dataList).show()
+        ShowCase.multi(dataList).show()
     }
 }
 
@@ -103,7 +103,7 @@ fun removeConstantShiftDemo() {
     val fixed = antiShift(shiftedRand)
 
     Platform.startup {
-        ShowCase().multi(listOf(
+        ShowCase.multi(listOf(
                 listOf(DoubleDataSet("line").addLine(initialRand)),
                 listOf(DoubleDataSet("shifted").addLine(shiftedRand)),
                 listOf(DoubleDataSet("f(random)").addLine(fixed)),
@@ -121,11 +121,11 @@ fun removeSpikesDemo() {
     val fixed = antiSpike(spikedRand,1.0)
 
     Platform.startup {
-        ShowCase().multi(listOf(
+        ShowCase.multi(listOf(
                 listOf(DoubleDataSet("line").addLine(initialRand)),
-                listOf(DoubleDataSet("shifted").addLine(spikedRand)),
-                listOf(DoubleDataSet("f(random)").addLine(fixed)),
-                listOf(DoubleDataSet("random").addLine(fixed))
+                listOf(DoubleDataSet("spiked").addLine(spikedRand)),
+                listOf(DoubleDataSet("filtered").addLine(fixed)),
+                listOf(DoubleDataSet("filtered").addLine(fixed))
         )).show()
     }
 }
@@ -143,7 +143,7 @@ fun trendDetectionDemo() {
     val antiTrend = antiTrend(trendy, windowSize)
     val detectedTrend = Line(trendDetect(trendy, windowSize))
     Platform.startup {
-        ShowCase().multi(listOf(
+        ShowCase.multi(listOf(
                 listOf(DoubleDataSet("line").addLine(spikedRand)),
                 listOf(DoubleDataSet("trendy").addLine(trendy)),
                 listOf(DoubleDataSet("antiTrend").addLine(antiTrend)),

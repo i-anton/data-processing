@@ -17,7 +17,7 @@ object Filter {
     fun antiSpike(input: Line, absRange: Double): Line {
         val fixed = Line(input)
         for (i in 1 until input.size - 1) {
-            if (abs(fixed.ys[i]) >= absRange) {
+            if (abs(fixed.ys[i]) > absRange) {
                 val next = fixed.ys[i + 1]
                 val clippedNext = max(min(-1.0, next), 1.0)
                 val mid = (fixed.ys[i - 1] + clippedNext) / 2
