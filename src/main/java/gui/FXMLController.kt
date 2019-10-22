@@ -39,13 +39,13 @@ class FXMLController : Initializable {
     private var lines = arrayOf(emptyList<Line>(), emptyList(), emptyList(), emptyList())
     private lateinit var charts: Array<XYChart>
 
-    private var inputParameters = listOf(LinearParametersTab(),
+    private val inputParameters = listOf(LinearParametersTab(),
             ExponentParametersTab(),
             PiecewiseParametersTab(),
             MyRandomParametersTab(),
             RandomParametersTab()
     )
-    private var transformParameters = listOf(NormalizeTab(),
+    private val transformParameters = listOf(NormalizeTab(),
             ShiftTab(),
             SpikesTab(),
             StationarityTab()
@@ -59,7 +59,7 @@ class FXMLController : Initializable {
     }
 
     private fun handleInputsTabs() {
-        for (comp in inputParameters) {
+        inputParameters.forEach { comp ->
             comp.onApplyClicked = EventHandler {
                 val selectedIdx = generateToCombo.selectionModel
                         .selectedItem.toInt()

@@ -5,7 +5,7 @@ import data.input.LineGenerator
 import de.gsi.dataset.spi.DoubleDataSet
 
 fun main() {
-    dftDemo()
+    trendDetectionDemo()
 }
 
 fun DoubleDataSet.addLine(line: Line): DoubleDataSet {

@@ -23,11 +23,11 @@ object SingleTransforms {
     fun spikes(line: Line, seed: Int, spikeNum: Int, scale: Double): Line {
         val rnd = Random(seed.toLong())
         val size = line.size
-        for (i in spikeNum downTo 1) {
+        repeat(spikeNum - 1) {
             val spikeIdx = rnd.nextInt(size)
             for (j in max(spikeIdx - 1, 0) until min(spikeIdx + 1, size)) {
                 val y = line.ys[j]
-                line.ys[spikeIdx - 1] = y + y * scale
+                line.ys[j] = y + y * scale
             }
         }
         return line

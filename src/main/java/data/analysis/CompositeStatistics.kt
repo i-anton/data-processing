@@ -93,12 +93,10 @@ object CompositeStatistics {
                 sqrt(first.ys.sumByDouble { (it - avgFirst).pow(2.0) } +
                         second.ys.sumByDouble { (it - avgSecond).pow(2.0) })
 
-        val array = DoubleArray(first.size)
-        for (funShift in array.indices) {
-            array[funShift] =
-                    (0 until first.size - funShift).fold(0.0) { sum, k ->
-                        sum + (first.ys[k] - avgFirst) * (second.ys[k + funShift] - avgSecond)
-                    } / divider
+        val array = DoubleArray(first.size) { funShift ->
+            (0 until first.size - funShift).fold(0.0) { sum, k ->
+                sum + (first.ys[k] - avgFirst) * (second.ys[k + funShift] - avgSecond)
+            } / divider
         }
         return Line(array)
     }

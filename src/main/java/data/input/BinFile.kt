@@ -8,9 +8,9 @@ import java.nio.file.StandardOpenOption
 
 object BinFile {
     fun read(filename: String): Line =
-            FileChannel.open(Paths.get(filename), StandardOpenOption.READ).use { ch ->
-                val resArr = FloatArray(ch.size().toInt())
-                ch.map(FileChannel.MapMode.READ_ONLY, 0, ch.size())
+            FileChannel.open(Paths.get(filename), StandardOpenOption.READ).use {
+                val resArr = FloatArray(it.size().toInt())
+                it.map(FileChannel.MapMode.READ_ONLY, 0, it.size())
                         .order(ByteOrder.nativeOrder())
                         .asFloatBuffer()
                         .get(resArr)

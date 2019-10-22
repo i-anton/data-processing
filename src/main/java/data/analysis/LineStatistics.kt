@@ -7,34 +7,34 @@ import kotlin.math.sqrt
 
 object LineStatistics {
     fun avg(line: Line, startIdx: Int = 0, endIdx: Int = line.size) =
-            (startIdx until endIdx).sumByDouble { line.ys[it] } / (endIdx - startIdx + 1)
+            (startIdx until endIdx).sumByDouble { line.ys[it] } / (endIdx - startIdx)
 
     fun stdAbsDev(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
         val avg = avg(line, startIdx, endIdx)
         return (startIdx until endIdx)
                 .sumByDouble { abs(line.ys[it] - avg) } /
-                (endIdx - startIdx + 1)
+                (endIdx - startIdx)
     }
 
     fun disp(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
         val avg = avg(line, startIdx, endIdx)
         return (startIdx until endIdx)
                 .sumByDouble { (line.ys[it] - avg).pow(2) } /
-                (endIdx - startIdx + 1)
+                (endIdx - startIdx)
     }
 
     fun assimetry(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
         val avg = avg(line, startIdx, endIdx)
         return (startIdx until endIdx)
                 .sumByDouble { (line.ys[it] - avg).pow(3) } /
-                (endIdx - startIdx + 1)
+                (endIdx - startIdx)
     }
 
     fun excess(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
         val avg = avg(line, startIdx, endIdx)
         return (startIdx until endIdx)
                 .sumByDouble { (line.ys[it] - avg).pow(4) } /
-                (endIdx - startIdx + 1)
+                (endIdx - startIdx)
     }
 
     fun stdDev(line: Line, startIdx: Int = 0, endIdx: Int = line.size) = sqrt(disp(line, startIdx, endIdx))
@@ -63,13 +63,13 @@ object LineStatistics {
     fun midSquare(line: Line, startIdx: Int = 0, endIdx: Int = line.size) =
             (startIdx until endIdx)
                     .sumByDouble { line.ys[it].pow(2) } /
-                    (endIdx - startIdx + 1)
+                    (endIdx - startIdx)
 
     fun midSquareError(line: Line, startIdx: Int = 0, endIdx: Int = line.size) = sqrt(midSquare(line, startIdx, endIdx))
 
     fun kurtosis(line: Line, startIdx: Int = 0, endIdx: Int = line.size): Double {
         val variance = disp(line, startIdx, endIdx)
         val excess = excess(line, startIdx, endIdx)
-        return (endIdx - startIdx + 1) * (excess / (variance * variance)) - 3
+        return (endIdx - startIdx) * (excess / (variance * variance)) - 3
     }
 }
