@@ -1,6 +1,6 @@
-package data.input
+package core.input
 
-import data.Line
+import core.Line
 import java.nio.ByteOrder
 import java.nio.channels.FileChannel
 import java.nio.file.Paths

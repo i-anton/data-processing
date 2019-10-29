@@ -1,6 +1,6 @@
-package data.model
+package core.model
 
-import data.Line
+import core.Line
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random

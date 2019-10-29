@@ -1,6 +1,6 @@
-package data.input
+package core.input
 
-import data.input.LineGenerator.anySeed
+import core.input.LineGenerator.anySeed
 
 class MyRandom(seed: Int = anySeed()) {
     private var prevValue = seed * 25923L
@@ -13,4 +13,5 @@ class MyRandom(seed: Int = anySeed()) {
         prevValue = value
         return value.toDouble() / Int.MAX_VALUE
     }
+
 }

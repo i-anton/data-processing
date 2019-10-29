@@ -1,6 +1,6 @@
-package data.analysis
+package core.analysis
 
-import data.Line
+import core.Line
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt

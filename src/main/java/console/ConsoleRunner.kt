@@ -1,11 +1,11 @@
 package console
 
-import data.Line
-import data.input.LineGenerator
+import core.Line
+import core.input.LineGenerator
 import de.gsi.dataset.spi.DoubleDataSet
 
 fun main() {
-    removeSpikesDemo()
+    dftRemapDemo()
 }
 
 fun DoubleDataSet.addLine(line: Line): DoubleDataSet {
@@ -17,7 +17,6 @@ fun DoubleDataSet.addLine(line: Line): DoubleDataSet {
 
 class MyRnd(seed: Int = LineGenerator.anySeed()) {
     private var prevValue = seed * 25923
-
     fun nextDouble(): Double {
         var value = prevValue * 63846723
         val shift = ((value ushr 12) xor prevValue) ushr 24

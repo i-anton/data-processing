@@ -1,6 +1,6 @@
 package gui.component.transformTabs
 
-import data.analysis.CompositeStatistics
+import core.analysis.CompositeStatistics
 import gui.component.control.ParametersTab
 import gui.component.control.TextFieldFormat
 import gui.component.control.ValidatableTextField

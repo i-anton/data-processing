@@ -1,9 +1,9 @@
-package data.analysis
+package core.analysis
 
-import data.Line
-import data.analysis.LineStatistics.avg
-import data.analysis.LineStatistics.max
-import data.analysis.LineStatistics.min
+import core.Line
+import core.analysis.LineStatistics.avg
+import core.analysis.LineStatistics.max
+import core.analysis.LineStatistics.min
 import java.util.*
 import kotlin.math.*
 
@@ -90,15 +90,14 @@ object CompositeStatistics {
         val avgFirst = avg(first)
         val avgSecond = avg(second)
         val divider =
-                sqrt(first.ys.sumByDouble { (it - avgFirst).pow(2.0) } +
-                        second.ys.sumByDouble { (it - avgSecond).pow(2.0) })
+                sqrt(first.ys.sumByDouble { (it - avgFirst).pow(2.0) }) *
+                        sqrt(second.ys.sumByDouble { (it - avgSecond).pow(2.0) })
 
-        val array = DoubleArray(first.size) { funShift ->
-            (0 until first.size - funShift).fold(0.0) { sum, k ->
-                sum + (first.ys[k] - avgFirst) * (second.ys[k + funShift] - avgSecond)
+        return Line(DoubleArray(first.size) {
+            (0 until first.size - it).fold(0.0) { sum, k ->
+                sum + (first.ys[k] - avgFirst) * (second.ys[k + it] - avgSecond)
             } / divider
-        }
-        return Line(array)
+        })
     }
 
     fun dft(line: Line): Line {
@@ -107,12 +106,20 @@ object CompositeStatistics {
             var sumReal = 0.0
             var sumImag = 0.0
             for (t in 0 until n) {
-                val angle = 2.0 * Math.PI * t * k / n
+                val angle = (2.0 * Math.PI * k * t) / n
                 sumReal += line.ys[t] * cos(angle)
                 sumImag += line.ys[t] * sin(angle)
             }
+            sumReal /= n
+            sumImag /= n
+
             sqrt(sumReal * sumReal + sumImag * sumImag)
         }
         return Line(arr)
+    }
+
+    fun dftRemap(line: Line, rate: Double): Line {
+        val n = line.size
+        return Line(DoubleArray(n / 2) { it * rate / n }, line.ys.copyOf(n / 2))
     }
 }

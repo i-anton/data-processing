@@ -1,16 +1,17 @@
 package console
 
-import data.Line
-import data.analysis.CompositeStatistics
-import data.analysis.LineStatistics
-import data.input.LineGenerator
-import data.model.Combine
-import data.model.Combine.multiNoiseAvg
-import data.model.Filter.antiShift
-import data.model.Filter.antiSpike
-import data.model.Filter.antiTrend
-import data.model.Filter.trendDetect
-import data.model.SingleTransforms
+import core.Line
+import core.analysis.CompositeStatistics
+import core.analysis.LineStatistics
+import core.input.LineGenerator
+import core.model.Combine
+import core.model.Combine.multiNoiseAvg
+import core.model.Filter.antiShift
+import core.model.Filter.antiSpike
+import core.model.Filter.antiSpikeWindowed
+import core.model.Filter.antiTrend
+import core.model.Filter.trendDetect
+import core.model.SingleTransforms
 import de.gsi.dataset.spi.DoubleDataSet
 import gui.ShowCase
 import javafx.application.Platform
@@ -24,9 +25,7 @@ fun combineDemo() {
             listOf(DoubleDataSet("Multiply").addLine(Combine.multiplicative(random, linear))),
             listOf(DoubleDataSet("Linear").addLine(linear))
     )
-    Platform.startup {
-        ShowCase.multi(dataList).show()
-    }
+    Platform.startup { ShowCase.multi(dataList).show() }
 }
 
 fun combineAvgDemo() {
@@ -39,9 +38,7 @@ fun combineAvgDemo() {
     val combines = combinesRaw.map {
         listOf(DoubleDataSet("").addLine(it))
     }
-    Platform.startup {
-        ShowCase.multi(combines).show()
-    }
+    Platform.startup { ShowCase.multi(combines).show() }
     combinesRaw.forEach {
         println(LineStatistics.stdDev(it))
     }
@@ -64,8 +61,22 @@ fun autoCorrelationDemo() {
                 listOf(DoubleDataSet("line").addLine(initial)),
                 listOf(DoubleDataSet("f(random)").addLine(statsRand)),
                 listOf(DoubleDataSet("random").addLine(initialRand))
-        )
-        ).show()
+        )).show()
+    }
+}
+
+fun crossCorrelationDemo() {
+    val initial = Line(LineGenerator.linear(100, 1.0, 0.0))
+    val initialRand = LineGenerator.random(100)
+    val stats = CompositeStatistics.autoCorrelation(initialRand)
+    val statsRand = CompositeStatistics.crossCorrelation(initialRand, initialRand)
+    Platform.startup {
+        ShowCase.multi(listOf(
+                listOf(DoubleDataSet("f(line)").addLine(stats)),
+                listOf(DoubleDataSet("line").addLine(initial)),
+                listOf(DoubleDataSet("f(random)").addLine(statsRand)),
+                listOf(DoubleDataSet("random").addLine(initialRand))
+        )).show()
     }
 }
 
@@ -73,26 +84,35 @@ fun harmonicDemo() {
     /* 500 hz is limit*/
     val frequencies = listOf(11.0, 110.0, 250.0, 510.0)
     val dataList = frequencies.map {
-        listOf(DoubleDataSet("").addLine(
+        listOf(DoubleDataSet("${it}hz").addLine(
                 LineGenerator.harmonic(1000, 100.0, it))
         )
     }
-    Platform.startup {
-        ShowCase.multi(dataList).show()
-    }
+    Platform.startup { ShowCase.multi(dataList).show() }
 }
 
 fun dftDemo() {
     val frequencies = listOf(11.0, 110.0, 250.0, 510.0)
     val dataList = frequencies.map {
-        listOf(DoubleDataSet("").addLine(
+        listOf(DoubleDataSet("dft ${it}hz").addLine(
                 CompositeStatistics.dft(LineGenerator.harmonic(1000, 100.0, it)))
         )
     }
-    Platform.startup {
-        ShowCase.multi(dataList).show()
-    }
+    Platform.startup { ShowCase.multi(dataList).show() }
 }
+
+fun dftRemapDemo() {
+    val frequencies = listOf(11.0, 110.0, 250.0, 510.0)
+    val dots = 1000
+    val dataList = frequencies.map {
+        listOf(DoubleDataSet("fixed dft ${it}hz").addLine(
+                CompositeStatistics.dftRemap(CompositeStatistics.dft(LineGenerator.harmonic(dots, 100.0, it)),
+                        dots.toDouble()))
+        )
+    }
+    Platform.startup { ShowCase.multi(dataList).show() }
+}
+
 
 fun removeConstantShiftDemo() {
     val initialRand = LineGenerator.random(100, -1.0, 1.0)
@@ -118,11 +138,14 @@ fun removeSpikesDemo() {
             10,
             5.0)
 
-    val fixed = antiSpike(spikedRand,1.0)
+    val fixed = antiSpike(spikedRand, 1.0)
+    val fixed2 = antiSpikeWindowed(spikedRand, 1.0, 1)
 
     Platform.startup {
         ShowCase.multi(listOf(
-                listOf(DoubleDataSet("line").addLine(initialRand)),
+                listOf(DoubleDataSet("line").addLine(initialRand),
+                        DoubleDataSet("filtered").addLine(fixed),
+                        DoubleDataSet("filtered2").addLine(fixed2)),
                 listOf(DoubleDataSet("spiked").addLine(spikedRand)),
                 listOf(DoubleDataSet("filtered").addLine(fixed)),
                 listOf(DoubleDataSet("filtered").addLine(fixed))

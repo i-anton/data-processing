@@ -1,6 +1,6 @@
 package gui
 
-import data.Line
+import core.Line
 import de.gsi.chart.XYChart
 import de.gsi.dataset.spi.DoubleDataSet
 import gui.component.inputTabs.*

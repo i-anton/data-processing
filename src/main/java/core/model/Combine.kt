@@ -1,7 +1,7 @@
-package data.model
+package core.model
 
-import data.Line
-import data.input.LineGenerator
+import core.Line
+import core.input.LineGenerator
 import java.util.function.BiFunction
 
 object Combine {

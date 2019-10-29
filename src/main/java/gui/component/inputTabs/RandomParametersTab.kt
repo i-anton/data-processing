@@ -1,6 +1,6 @@
 package gui.component.inputTabs
 
-import data.input.LineGenerator
+import core.input.LineGenerator
 import gui.component.control.ParametersTab
 import gui.component.or
 import gui.component.control.TextFieldFormat

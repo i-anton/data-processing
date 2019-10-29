@@ -1,7 +1,7 @@
 package gui.component.transformTabs
 
-import data.Line
-import data.model.SingleTransforms
+import core.Line
+import core.model.SingleTransforms
 import gui.component.control.TextFieldFormat
 import gui.component.control.ValidatableTextField
 import gui.component.control.ParametersTab

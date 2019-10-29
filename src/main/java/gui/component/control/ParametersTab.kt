@@ -1,6 +1,6 @@
 package gui.component.control
 
-import data.Line
+import core.Line
 import javafx.beans.DefaultProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.collections.ObservableList
