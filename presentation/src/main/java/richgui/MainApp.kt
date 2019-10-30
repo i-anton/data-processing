@@ -8,7 +8,6 @@ import javafx.scene.Scene
 import javafx.stage.Stage
 
 class MainApp : Application() {
-
     @Throws(Exception::class)
     override fun start(stage: Stage) {
         val root = FXMLLoader.load<Parent>(javaClass.getResource("scene.fxml"))
@@ -19,6 +18,7 @@ class MainApp : Application() {
         stage.show()
     }
 }
+
 fun main(args: Array<String>) {
     launch(MainApp::class.java, *args)
 }

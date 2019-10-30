@@ -16,7 +16,7 @@ javafx {
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
-mainClassName = 'gui.rich-gui.MainAppKt'
+mainClassName = 'presentation.richgui.MainAppKt'
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
