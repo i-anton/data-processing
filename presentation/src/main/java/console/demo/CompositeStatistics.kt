@@ -1,13 +1,10 @@
 package console.demo
 
-import core.analysis.CompositeStatistics
 import core.analysis.CompositeStatistics.autoCorrelation
 import core.analysis.CompositeStatistics.crossCorrelation
 import core.analysis.CompositeStatistics.isStationary
-import core.input.LineGenerator
 import core.input.LineGenerator.linear
 import core.input.LineGenerator.random
-import infrastructure.DataSetTransforms
 import infrastructure.DataSetTransforms.dataSetSingle
 import infrastructure.ShowCase
 import javafx.application.Platform
@@ -24,9 +21,9 @@ object CompositeStatistics {
         val statsRand = autoCorrelation(initialRand)
         Platform.startup {
             ShowCase.multi(
-                    dataSetSingle("f(line)", stats),
+                    dataSetSingle("auto(line)", stats),
                     dataSetSingle("line", initial),
-                    dataSetSingle("f(random)", statsRand),
+                    dataSetSingle("auto(random)", statsRand),
                     dataSetSingle("random", initialRand)
             ).show()
         }
@@ -39,9 +36,9 @@ object CompositeStatistics {
         val statsRand = crossCorrelation(initialRand, initialRand)
         Platform.startup {
             ShowCase.multi(
-                    dataSetSingle("f(line)", stats),
+                    dataSetSingle("auto(line)", stats),
                     dataSetSingle("line", initial),
-                    dataSetSingle("f(random)", statsRand),
+                    dataSetSingle("cross(line,random)", statsRand),
                     dataSetSingle("random", initialRand)
             ).show()
         }

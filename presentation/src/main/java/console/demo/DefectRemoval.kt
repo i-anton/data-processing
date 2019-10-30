@@ -20,13 +20,13 @@ object DefectRemoval {
     fun removeConstantShiftDemo() {
         val initialRand = random(100, -1.0, 1.0)
         val shiftedRand = initialRand.shift(100.0, 1.0)
-        val fixed = shiftedRand.antiShift()
+        val antiShift = shiftedRand.antiShift()
         Platform.startup {
             ShowCase.multi(
                     dataSetSingle("line", initialRand),
                     dataSetSingle("shifted", shiftedRand),
-                    dataSetSingle("f(random)", fixed),
-                    dataSetSingle("random", fixed)
+                    dataSetSingle("antiShift", antiShift),
+                    emptyList()
             ).show()
         }
     }
@@ -35,27 +35,26 @@ object DefectRemoval {
         val initialRand = random(100, -1.0, 1.0)
         val spikedRand = initialRand.spikes(10, 5.0)
 
-        val fixed = spikedRand.antiSpike(1.0)
-        val fixed2 = spikedRand.antiSpikeWindowed(1.0, 1)
+        val antiSpike = spikedRand.antiSpike(1.0)
+        val antiSpikeWin = spikedRand.antiSpikeWindowed(1.0, 1)
 
         Platform.startup {
             ShowCase.multi(
                     dataSetMulti(
                             Pair("line", initialRand),
-                            Pair("filtered", fixed),
-                            Pair("filtered2", fixed2)
+                            Pair("antiSpike", antiSpike),
+                            Pair("antiSpikeWin", antiSpikeWin)
                     ),
                     dataSetSingle("spiked", spikedRand),
-                    dataSetSingle("filtered", fixed),
-                    dataSetSingle("filtered", fixed)
+                    dataSetSingle("antiSpike", antiSpike),
+                    dataSetSingle("antiSpikeWin", antiSpikeWin)
             ).show()
         }
     }
 
     fun trendDetectionDemo() {
         val dots = 100
-        val initialRand = random(dots, -1.0, 1.0)
-        val spikedRand = initialRand.spikes(10, 5.0)
+        val spikedRand = random(dots, -1.0, 1.0).spikes(10, 5.0)
         val trendy = spikedRand add linear(dots, 0.75, 50.0)
         val windowSize = 3
         val antiTrend = trendy.antiTrend(windowSize)

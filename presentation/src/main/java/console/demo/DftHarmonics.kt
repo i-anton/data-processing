@@ -10,7 +10,6 @@ import javafx.application.Platform
 object DftHarmonics {
     private val frequencies = listOf(11.0, 110.0, 250.0, 510.0)
     fun harmonicDemo() {
-        /* 500 hz is limit*/
         val dataList = frequencies.map {
             dataSetSingle("${it}hz",
                     harmonic(1000, 100.0, it)

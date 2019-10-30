@@ -1,7 +1,7 @@
 package console
 
-import console.demo.DftWithDefects.harmonicWithShift
+import console.demo.DftWithDefects.dftHarmonicWithSpikes
 
 fun main() {
-    harmonicWithShift()
+    dftHarmonicWithSpikes()
 }

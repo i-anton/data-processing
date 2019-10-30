@@ -17,18 +17,16 @@ import javafx.application.Platform
 
 object DftWithDefects {
     fun harmonicWithShift() {
-        val initialRand = harmonic(1000, 10.0, 15.0)
-        val shiftedRand = initialRand.shift(100.0, 1.0)
-
-        val dft = shiftedRand.dft().dftRemap(500.0)
+        val shiftedRand = harmonic(1000, 10.0, 15.0).shift(100.0, 1.0)
+        val dftShifted = shiftedRand.dft().dftRemap(500.0)
         val antiShifted = shiftedRand.antiShift()
-        val dft2 = antiShifted.dft().dftRemap(500.0)
+        val dftAntiShifted = antiShifted.dft().dftRemap(500.0)
         Platform.startup {
             ShowCase.multi(
-                    dataSetSingle("line", shiftedRand),
-                    dataSetSingle("shifted", antiShifted),
-                    dataSetSingle("f(random)", dft),
-                    dataSetSingle("random", dft2)
+                    dataSetSingle("shifted", shiftedRand),
+                    dataSetSingle("antiShifted", antiShifted),
+                    dataSetSingle("dftShifted", dftShifted),
+                    dataSetSingle("dftAntiShifted", dftAntiShifted)
             ).show()
         }
     }
@@ -38,13 +36,13 @@ object DftWithDefects {
                 linear(1000, -1.0, 0.0)
         val dft = trendy.dft().dftRemap(500.0)
         val antiTrend = trendy.antiTrend()
-        val dft2 = antiTrend.dft().dftRemap(500.0)
+        val dftAntiTrend = antiTrend.dft().dftRemap(500.0)
         Platform.startup {
             ShowCase.multi(
-                    dataSetSingle("line", trendy),
-                    dataSetSingle("shifted", antiTrend),
-                    dataSetSingle("f(random)", dft),
-                    dataSetSingle("random", dft2)
+                    dataSetSingle("trend", trendy),
+                    dataSetSingle("antiTrend", antiTrend),
+                    dataSetSingle("dftTrend", dft),
+                    dataSetSingle("dftAntiTrend", dftAntiTrend)
             ).show()
         }
     }
@@ -53,47 +51,44 @@ object DftWithDefects {
         val initialRand = random(1000, 10.0, 15.0)
         val spikes = initialRand.spikes(4, 100.0)
         val dft = initialRand.dft().dftRemap(500.0)
-        val dft2 = spikes.dft().dftRemap(500.0)
+        val dftSpiked = spikes.dft().dftRemap(500.0)
         Platform.startup {
             ShowCase.multi(
                     dataSetSingle("line", initialRand),
                     dataSetSingle("spiked", spikes),
                     dataSetSingle("dft", dft),
-                    dataSetSingle("dft2", dft2)
+                    dataSetSingle("dftSpiked", dftSpiked)
             ).show()
         }
     }
 
     fun dftHarmonicWithSpikes() {
-        val initialRand = harmonic(1000, 10.0, 15.0)
-        val spikes = initialRand.spikes( 4, 100.0)
-        val combined = spikes add random(1000, -30.0, 30.0, 42)
-        val dft = spikes.dft().dftRemap(500.0)
-        val dft2 = combined.dft().dftRemap(500.0)
+        val spikes = harmonic(1000, 10.0, 15.0).spikes( 4, 100.0)
+        val combined = spikes add random(1000, -100.0, 100.0, 42)
+        val dftSpikes = spikes.dft().dftRemap(500.0)
+        val dftCombined = combined.dft().dftRemap(500.0)
         Platform.startup {
             ShowCase.multi(
-                    dataSetSingle("line", combined),
-                    dataSetSingle("spiked", spikes),
-                    dataSetSingle("dft", dft),
-                    dataSetSingle("dft2", dft2)
+                    dataSetSingle("combined", combined),
+                    dataSetSingle("spikes", spikes),
+                    dataSetSingle("dftCombined", dftCombined),
+                    dataSetSingle("dftSpikes", dftSpikes)
             ).show()
         }
     }
 
     fun autoCorrelationForHarmonic() {
-        val initialRand = harmonic(1000, 10.0, 15.0)
-        val combined = initialRand add random(1000, -30.0, 30.0, 42)
-        val dft = autoCorrelation(initialRand)
-        val dft2 = autoCorrelation(combined)
+        val initial = harmonic(1000, 10.0, 15.0)
+        val combined = initial add random(1000, -30.0, 30.0, 42)
+        val correlation = autoCorrelation(initial)
+        val correlationNoisy = autoCorrelation(combined)
         Platform.startup {
             ShowCase.multi(
-                    dataSetSingle("line", combined),
-                    dataSetSingle("spiked", initialRand),
-                    dataSetSingle("dft", dft2),
-                    dataSetSingle("dft2", dft)
+                    dataSetSingle("line", initial),
+                    dataSetSingle("noisy", combined),
+                    dataSetSingle("correlation", correlation),
+                    dataSetSingle("correlationNoisy", correlationNoisy)
             ).show()
         }
     }
-
-
 }
