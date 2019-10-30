@@ -1,29 +1,9 @@
 plugins {
-    id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.8'
     id 'org.jetbrains.kotlin.jvm' version '1.3.50'
 }
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'de.gsi.chart:chartfx-chart:11.0.3'
-    implementation 'junit:junit:4.12'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-}
-
-javafx {
-    version = "13"
-    modules = [ 'javafx.controls', 'javafx.fxml']
-}
-
-mainClassName = 'gui.MainAppKt'
-
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+allprojects {
+    repositories {
+        mavenCentral()
+    }
 }
