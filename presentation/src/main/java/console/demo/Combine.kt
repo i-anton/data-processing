@@ -1,6 +1,6 @@
 package console.demo
 
-import core.analysis.LineStatistics
+import core.analysis.stdDev
 import core.input.LineGenerator.linear
 import core.input.LineGenerator.random
 import core.model.Combine.multiNoiseAvg
@@ -33,6 +33,6 @@ object Combine {
                     .toTypedArray()
                     .let { ShowCase.multi(*it).show() }
         }
-        lines.forEach { println(LineStatistics.stdDev(it)) }
+        lines.forEach { println(it.stdDev()) }
     }
 }

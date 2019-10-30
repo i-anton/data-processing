@@ -1,7 +1,6 @@
 package richgui.component.transformTabs
 
-import core.Line
-import core.model.SingleTransforms
+import core.model.SingleTransforms.normalize
 import richgui.component.control.TextFieldFormat
 import richgui.component.control.ValidatableTextField
 import richgui.component.control.ParametersTab
@@ -14,5 +13,5 @@ class NormalizeTab : ParametersTab("Нормализация") {
     }
 
     override fun generateResult() =
-            listOf(SingleTransforms.normalize(Line(inputLine), scale.text.toDouble()))
+            listOf(inputLine.normalize(scale.text.toDouble()))
 }

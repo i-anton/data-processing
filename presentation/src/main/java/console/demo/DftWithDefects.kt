@@ -18,11 +18,11 @@ import javafx.application.Platform
 object DftWithDefects {
     fun harmonicWithShift() {
         val initialRand = harmonic(1000, 10.0, 15.0)
-        val shiftedRand = shift(initialRand, 100.0, 1.0)
+        val shiftedRand = initialRand.shift(100.0, 1.0)
 
-        val dft = dftRemap(dft(shiftedRand), 500.0)
-        val antiShifted = antiShift(shiftedRand)
-        val dft2 = dftRemap(dft(antiShifted), 500.0)
+        val dft = shiftedRand.dft().dftRemap(500.0)
+        val antiShifted = shiftedRand.antiShift()
+        val dft2 = antiShifted.dft().dftRemap(500.0)
         Platform.startup {
             ShowCase.multi(
                     dataSetSingle("line", shiftedRand),
@@ -34,15 +34,15 @@ object DftWithDefects {
     }
 
     fun harmonicWithTrend() {
-        val newRand = harmonic(1000, 10.0, 15.0) add
+        val trendy = harmonic(1000, 10.0, 15.0) add
                 linear(1000, -1.0, 0.0)
-        val dft = dftRemap(dft(newRand), 500.0)
-        val antiShifted = antiTrend(newRand)
-        val dft2 = dftRemap(dft(antiShifted), 500.0)
+        val dft = trendy.dft().dftRemap(500.0)
+        val antiTrend = trendy.antiTrend()
+        val dft2 = antiTrend.dft().dftRemap(500.0)
         Platform.startup {
             ShowCase.multi(
-                    dataSetSingle("line", newRand),
-                    dataSetSingle("shifted", antiShifted),
+                    dataSetSingle("line", trendy),
+                    dataSetSingle("shifted", antiTrend),
                     dataSetSingle("f(random)", dft),
                     dataSetSingle("random", dft2)
             ).show()
@@ -51,9 +51,9 @@ object DftWithDefects {
 
     fun dftForSpikes() {
         val initialRand = random(1000, 10.0, 15.0)
-        val spikes = spikes(initialRand, 4, 100.0)
-        val dft = dftRemap(dft(initialRand), 500.0)
-        val dft2 = dftRemap(dft(spikes), 500.0)
+        val spikes = initialRand.spikes(4, 100.0)
+        val dft = initialRand.dft().dftRemap(500.0)
+        val dft2 = spikes.dft().dftRemap(500.0)
         Platform.startup {
             ShowCase.multi(
                     dataSetSingle("line", initialRand),
@@ -66,10 +66,10 @@ object DftWithDefects {
 
     fun dftHarmonicWithSpikes() {
         val initialRand = harmonic(1000, 10.0, 15.0)
-        val spikes = spikes(initialRand, 4, 100.0)
+        val spikes = initialRand.spikes( 4, 100.0)
         val combined = spikes add random(1000, -30.0, 30.0, 42)
-        val dft = dftRemap(dft(spikes), 500.0)
-        val dft2 = dftRemap(dft(combined), 500.0)
+        val dft = spikes.dft().dftRemap(500.0)
+        val dft2 = combined.dft().dftRemap(500.0)
         Platform.startup {
             ShowCase.multi(
                     dataSetSingle("line", combined),

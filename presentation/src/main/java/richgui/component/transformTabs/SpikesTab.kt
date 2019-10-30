@@ -1,6 +1,6 @@
 package richgui.component.transformTabs
 
-import core.model.SingleTransforms
+import core.model.SingleTransforms.spikes
 import richgui.component.control.ParametersTab
 import richgui.component.control.TextFieldFormat
 import richgui.component.control.ValidatableTextField
@@ -19,7 +19,6 @@ class SpikesTab : ParametersTab("Пики") {
     }
 
     override fun generateResult() = listOf(
-            SingleTransforms.spikes(inputLine,
-                    spike.text.toInt(), scale.text.toDouble(), seed.text.toInt())
+            inputLine.spikes(spike.text.toInt(), scale.text.toDouble(), seed.text.toInt())
     )
 }

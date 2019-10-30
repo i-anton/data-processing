@@ -1,22 +1,22 @@
 package core.model
 
 import core.Line
-import core.analysis.LineStatistics
+import core.analysis.mean
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
 object Filter {
-    fun antiShift(input: Line): Line {
-        val avg = LineStatistics.mean(input)
-        return Line(DoubleArray(input.size) {
-            input.ys[it] - avg
+    fun Line.antiShift(): Line {
+        val avg = mean()
+        return Line(DoubleArray(size) {
+            ys[it] - avg
         })
     }
 
-    fun antiSpike(input: Line, absRange: Double): Line {
-        val fixed = Line(input)
-        for (i in 1 until input.size - 1) {
+    fun Line.antiSpike(absRange: Double): Line {
+        val fixed = Line(this)
+        for (i in 1 until size - 1) {
             if (abs(fixed.ys[i]) > absRange) {
                 val next = fixed.ys[i + 1]
                 val clippedNext = min(max(-1.0, next), 1.0)
@@ -27,12 +27,12 @@ object Filter {
         return fixed
     }
 
-    fun antiSpikeWindowed(input: Line, absRange: Double, windowSize: Int = 2): Line {
-        val fixed = Line(input)
+    fun Line.antiSpikeWindowed(absRange: Double, windowSize: Int = 2): Line {
+        val fixed = Line(this)
         for ((index, i) in fixed.ys.withIndex()) {
             if (abs(i) > absRange) {
                 val winStart = max(0, index - windowSize)
-                val winEnd = min(input.size, index + windowSize)
+                val winEnd = min(size, index + windowSize)
                 fixed.ys[index] = (winStart until winEnd).sumByDouble {
                     min(max(-1.0, fixed.ys[it]), 1.0)
                 } / (winEnd - winStart)
@@ -41,15 +41,15 @@ object Filter {
         return fixed
     }
 
-    fun antiTrend(input: Line, windowSize: Int = 3): Line {
-        val trendDetect = trendDetect(input, windowSize)
-        return Line(DoubleArray(input.size) { input.ys[it] - trendDetect[it] })
+    fun Line.antiTrend(windowSize: Int = 3): Line {
+        val trendDetect = trendDetect(windowSize)
+        return Line(DoubleArray(size) { ys[it] - trendDetect[it] })
     }
 
-    fun trendDetect(input: Line, windowSize: Int = 3) =
-            DoubleArray(input.size) {
-                val endIdx = min(it + windowSize, input.size)
+    fun Line.trendDetect(windowSize: Int = 3) =
+            DoubleArray(size) {
+                val endIdx = min(it + windowSize, size)
                 val startIdx = max(0, it - windowSize)
-                LineStatistics.mean(input, startIdx, endIdx)
+                mean(startIdx, endIdx)
             }
 }

@@ -7,23 +7,22 @@ import kotlin.math.min
 import kotlin.random.Random
 
 object SingleTransforms {
-    fun normalize(line: Line, scale: Double): Line {
-        var minVal = line.ys[0]
-        var maxVal = line.ys[0]
-        for (i in 1 until line.size) {
-            val curr = line.ys[i]
+    fun Line.normalize(scale: Double): Line {
+        var minVal = ys[0]
+        var maxVal = ys[0]
+        for (i in 1 until size) {
+            val curr = ys[i]
             if (curr > maxVal) maxVal = curr
             if (curr < minVal) minVal = curr
         }
-        return Line(line.size) {
-            scale * ((line.ys[it] - minVal) / (maxVal - minVal) - 0.5)
+        return Line(size) {
+            scale * ((ys[it] - minVal) / (maxVal - minVal) - 0.5)
         }
     }
 
-    fun spikes(line: Line, spikeNum: Int, scale: Double, seed: Int = anySeed()): Line {
+    fun Line.spikes(spikeNum: Int, scale: Double, seed: Int = anySeed()): Line {
         val rnd = Random(seed)
-        val size = line.size
-        val result = Line(line)
+        val result = Line(this)
         repeat(spikeNum - 1) {
             val spikeIdx = rnd.nextInt(size)
             for (j in max(spikeIdx - 1, 0) until min(spikeIdx + 1, size)) {
@@ -34,9 +33,9 @@ object SingleTransforms {
         return result
     }
 
-    fun shift(line: Line, shift: Double, scale: Double,
-              start: Double = line.xs.first(), end: Double = line.xs.last()): Line {
-        val result = Line(line)
+    fun Line.shift(shift: Double, scale: Double,
+              start: Double = xs.first(), end: Double = xs.last()): Line {
+        val result = Line(this)
         var startIdx = -1
         for (i in result.xs.indices) {
             if (result.xs[i] >= start) {
@@ -44,8 +43,8 @@ object SingleTransforms {
                 break
             }
         }
-        if (startIdx == -1) return line
-        for (i in startIdx until line.size) {
+        if (startIdx == -1) return result
+        for (i in startIdx until size) {
             if (result.xs[i] > end) break
             result.ys[i] = result.ys[i] * scale + shift
         }

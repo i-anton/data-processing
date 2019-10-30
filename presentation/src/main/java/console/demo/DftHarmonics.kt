@@ -22,7 +22,7 @@ object DftHarmonics {
     fun dftDemo() {
         val dataList = frequencies.map {
             dataSetSingle("dft ${it}hz",
-                    dft(harmonic(1000, 100.0, it))
+                    harmonic(1000, 100.0, it).dft()
             )
         }.toTypedArray()
         Platform.startup { ShowCase.multi(*dataList).show() }
@@ -32,8 +32,7 @@ object DftHarmonics {
         val dots = 1000
         val dataList = frequencies.map {
             dataSetSingle("fixed dft ${it}hz",
-                    dftRemap(dft(harmonic(dots, 100.0, it)),
-                            dots.toDouble())
+                    harmonic(dots, 100.0, it).dft().dftRemap(dots.toDouble())
             )
         }.toTypedArray()
         Platform.startup { ShowCase.multi(*dataList).show() }

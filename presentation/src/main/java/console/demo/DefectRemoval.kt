@@ -19,8 +19,8 @@ import javafx.application.Platform
 object DefectRemoval {
     fun removeConstantShiftDemo() {
         val initialRand = random(100, -1.0, 1.0)
-        val shiftedRand = shift(initialRand, 100.0, 1.0)
-        val fixed = antiShift(shiftedRand)
+        val shiftedRand = initialRand.shift(100.0, 1.0)
+        val fixed = shiftedRand.antiShift()
         Platform.startup {
             ShowCase.multi(
                     dataSetSingle("line", initialRand),
@@ -33,10 +33,10 @@ object DefectRemoval {
 
     fun removeSpikesDemo() {
         val initialRand = random(100, -1.0, 1.0)
-        val spikedRand = spikes(initialRand, 10, 5.0)
+        val spikedRand = initialRand.spikes(10, 5.0)
 
-        val fixed = antiSpike(spikedRand, 1.0)
-        val fixed2 = antiSpikeWindowed(spikedRand, 1.0, 1)
+        val fixed = spikedRand.antiSpike(1.0)
+        val fixed2 = spikedRand.antiSpikeWindowed(1.0, 1)
 
         Platform.startup {
             ShowCase.multi(
@@ -55,11 +55,11 @@ object DefectRemoval {
     fun trendDetectionDemo() {
         val dots = 100
         val initialRand = random(dots, -1.0, 1.0)
-        val spikedRand = spikes(initialRand, 10, 5.0)
+        val spikedRand = initialRand.spikes(10, 5.0)
         val trendy = spikedRand add linear(dots, 0.75, 50.0)
         val windowSize = 3
-        val antiTrend = antiTrend(trendy, windowSize)
-        val detectedTrend = Line(trendDetect(trendy, windowSize))
+        val antiTrend = trendy.antiTrend(windowSize)
+        val detectedTrend = Line(trendy.trendDetect(windowSize))
         Platform.startup {
             ShowCase.multi(
                     dataSetSingle("line", spikedRand),

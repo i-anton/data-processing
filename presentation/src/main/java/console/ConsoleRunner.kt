@@ -1,7 +1,7 @@
 package console
 
-import console.demo.DefectRemoval.removeSpikesDemo
+import console.demo.DftWithDefects.harmonicWithShift
 
 fun main() {
-    removeSpikesDemo()
+    harmonicWithShift()
 }

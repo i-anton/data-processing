@@ -1,10 +1,9 @@
 package richgui.component.transformTabs
 
-import core.Line
-import core.model.SingleTransforms
+import core.model.SingleTransforms.shift
+import richgui.component.control.ParametersTab
 import richgui.component.control.TextFieldFormat
 import richgui.component.control.ValidatableTextField
-import richgui.component.control.ParametersTab
 import richgui.component.or
 
 class ShiftTab : ParametersTab("Cмещение") {
@@ -22,7 +21,7 @@ class ShiftTab : ParametersTab("Cмещение") {
     }
 
     override fun generateResult() = listOf(
-            SingleTransforms.shift(Line(inputLine), start.text.toDouble(),
+            inputLine.shift( start.text.toDouble(),
                     end.text.toDouble(), shift.text.toDouble(), scale.text.toDouble())
     )
 }
