@@ -1,6 +1,6 @@
 package core.input
 
-import core.input.LineGenerator.anySeed
+fun anySeed() = System.nanoTime().toInt()
 
 class MyRandom(seed: Int = anySeed()) {
     private var prevValue = seed * 25923L

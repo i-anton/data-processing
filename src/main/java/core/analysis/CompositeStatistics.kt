@@ -1,30 +1,30 @@
 package core.analysis
 
 import core.Line
-import core.analysis.LineStatistics.avg
+import core.analysis.LineStatistics.mean
 import core.analysis.LineStatistics.max
 import core.analysis.LineStatistics.min
 import java.util.*
 import kotlin.math.*
 
 object CompositeStatistics {
+
     fun dataPerInterval(line: Line, intervalsCount: Int, error: Double): List<Line> {
         val dispResult = Line(intervalsCount)
         val avgResult = Line(intervalsCount)
         val errorResult = Line(intervalsCount)
         val size = line.size
         val pointsInInterval = size / intervalsCount
-        var startIdx = 0
         val ampl = LineStatistics.amplitude(line, 0, size)
         for (i in 0 until intervalsCount) {
+            val startIdx = i * pointsInInterval
             val endIdx = min(startIdx + pointsInInterval, size)
             dispResult.xs[i] = startIdx.toDouble()
-            dispResult.ys[i] = LineStatistics.disp(line, startIdx, endIdx)
+            dispResult.ys[i] = LineStatistics.variance(line, startIdx, endIdx)
             avgResult.xs[i] = startIdx.toDouble()
-            avgResult.ys[i] = avg(line, startIdx, endIdx)
+            avgResult.ys[i] = mean(line, startIdx, endIdx)
             errorResult.xs[i] = startIdx.toDouble()
             errorResult.ys[i] = error * ampl
-            startIdx += pointsInInterval
         }
         return listOf(dispResult, avgResult, errorResult)
     }
@@ -40,8 +40,8 @@ object CompositeStatistics {
             val start = intervalIdx * intervalSize
             val end = min(start + intervalSize, line.size)
 
-            disps[intervalIdx] = LineStatistics.disp(line, start, end)
-            avgs[intervalIdx] = avg(line, start, end)
+            disps[intervalIdx] = LineStatistics.variance(line, start, end)
+            avgs[intervalIdx] = mean(line, start, end)
         }
 
         return (0 until intervalCount - 1).none {
@@ -63,14 +63,14 @@ object CompositeStatistics {
                     map[end] = map.getOrDefault(end, 0) + 1
         }
         val ys = map.keys.toDoubleArray()
-        val xs = DoubleArray(intervalsCount)
-        for (index in xs.indices)
-            xs[index] = map.getOrDefault(ys[index], 0).toDouble()
+        val xs = DoubleArray(intervalsCount){
+            map.getOrDefault(ys[it], 0).toDouble()
+        }
         return Line(xs, ys)
     }
 
     fun autoCorrelation(line: Line, start: Int = 0, end: Int = line.size): Line {
-        val avg = avg(line, start, end)
+        val avg = mean(line, start, end)
         val divider = (start until end)
                 .sumByDouble { (line.ys[it] - avg).pow(2.0) }
 
@@ -81,14 +81,13 @@ object CompositeStatistics {
                         sum + (line.ys[k] - avg) * (line.ys[k + funShift] - avg)
                     } / divider
         }
-
         return Line(array)
     }
 
     fun crossCorrelation(first: Line, second: Line): Line {
         require(first.size == second.size)
-        val avgFirst = avg(first)
-        val avgSecond = avg(second)
+        val avgFirst = mean(first)
+        val avgSecond = mean(second)
         val divider =
                 sqrt(first.ys.sumByDouble { (it - avgFirst).pow(2.0) }) *
                         sqrt(second.ys.sumByDouble { (it - avgSecond).pow(2.0) })

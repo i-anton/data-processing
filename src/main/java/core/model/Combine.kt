@@ -5,6 +5,7 @@ import core.input.LineGenerator
 import java.util.function.BiFunction
 
 object Combine {
+
     fun additive(one: Line, other: Line) = lineCombine(one, other, BiFunction { x, y -> x + y })
 
     fun multiplicative(one: Line, other: Line) = lineCombine(one, other, BiFunction { x, y -> x * y })
@@ -32,9 +33,12 @@ object Combine {
             isOne -> other
             else -> one
         }
-        for (i in 0 until copyFrom.size) {
+        for (i in 0 until copyFrom.size)
             resultLine.ys[i] = f.apply(resultLine.ys[i], copyFrom.ys[i])
-        }
         return resultLine
     }
 }
+
+infix fun Line.add(other: Line) = Combine.additive(this, other)
+
+infix fun Line.mul(other: Line) = Combine.multiplicative(this, other)

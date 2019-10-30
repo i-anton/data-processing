@@ -1,7 +1,5 @@
 package core
 
-import de.gsi.dataset.spi.DoubleDataSet
-
 class Line constructor(
         var xs: DoubleArray,
         var ys: DoubleArray
@@ -18,10 +16,4 @@ class Line constructor(
     constructor(arrYs: FloatArray) :
             this(DoubleArray(arrYs.size) { it.toDouble() },
                     DoubleArray(arrYs.size) { arrYs[it].toDouble() })
-
-    fun addToDataSet(dataSet: DoubleDataSet) {
-        dataSet.setAutoNotifaction(false)
-        xs.indices.forEach { i -> dataSet.add(xs[i], ys[i]) }
-        dataSet.setAutoNotifaction(true)
-    }
 }

@@ -40,8 +40,6 @@ object LineGenerator {
         return line
     }
 
-    fun anySeed() = System.nanoTime().toInt()
-
     fun random(dots: Int, minVal: Double = 0.0,
                maxVal: Double = 1.0, seed: Int = anySeed()): Line {
         val line = Line(dots)

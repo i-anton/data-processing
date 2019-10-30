@@ -1,6 +1,7 @@
 package core.model
 
 import core.Line
+import core.input.anySeed
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
@@ -9,43 +10,45 @@ object SingleTransforms {
     fun normalize(line: Line, scale: Double): Line {
         var minVal = line.ys[0]
         var maxVal = line.ys[0]
-        val size = line.size
-        for (i in 1 until size) {
+        for (i in 1 until line.size) {
             val curr = line.ys[i]
             if (curr > maxVal) maxVal = curr
             if (curr < minVal) minVal = curr
         }
-        for (i in 0 until size)
-            line.ys[i] = scale * ((line.ys[i] - minVal) / (maxVal - minVal) - 0.5)
-        return line
+        return Line(line.size) {
+            scale * ((line.ys[it] - minVal) / (maxVal - minVal) - 0.5)
+        }
     }
 
-    fun spikes(line: Line, seed: Int, spikeNum: Int, scale: Double): Line {
-        val rnd = Random(seed.toLong())
+    fun spikes(line: Line, spikeNum: Int, scale: Double, seed: Int = anySeed()): Line {
+        val rnd = Random(seed)
         val size = line.size
+        val result = Line(line)
         repeat(spikeNum - 1) {
             val spikeIdx = rnd.nextInt(size)
             for (j in max(spikeIdx - 1, 0) until min(spikeIdx + 1, size)) {
-                val y = line.ys[j]
-                line.ys[j] = y + y * scale
+                val y = result.ys[j]
+                result.ys[j] = y + y * scale
             }
         }
-        return line
+        return result
     }
 
-    fun shift(line: Line, start: Double, end: Double, shift: Double, scale: Double): Line {
+    fun shift(line: Line, shift: Double, scale: Double,
+              start: Double = line.xs.first(), end: Double = line.xs.last()): Line {
+        val result = Line(line)
         var startIdx = -1
-        for (i in 0 until line.size) {
-            if (line.xs[i] >= start) {
+        for (i in result.xs.indices) {
+            if (result.xs[i] >= start) {
                 startIdx = i
                 break
             }
         }
         if (startIdx == -1) return line
         for (i in startIdx until line.size) {
-            if (line.xs[i] > end) break
-            line.ys[i] = line.ys[i] * scale + shift
+            if (result.xs[i] > end) break
+            result.ys[i] = result.ys[i] * scale + shift
         }
-        return line
+        return result
     }
 }

@@ -11,22 +11,18 @@ import javafx.scene.layout.RowConstraints
 import javafx.stage.Stage
 
 object ShowCase {
-    private fun genRowConstraint() = RowConstraints().apply {
-        vgrow = Priority.ALWAYS
-    }
+    private fun genRowConstraint() = RowConstraints().apply { vgrow = Priority.ALWAYS }
 
-    private fun genColumnConstraint() = ColumnConstraints().apply {
-        hgrow = Priority.ALWAYS
-    }
+    private fun genColumnConstraint() = ColumnConstraints().apply { hgrow = Priority.ALWAYS }
 
-    private fun createLayout(dataSets: List<List<DataSet>>): Parent {
+    private fun createLayout(vararg dataSets: List<DataSet>): Parent {
         val grid = GridPane().apply {
             rowConstraints.addAll(genRowConstraint(), genRowConstraint())
             columnConstraints.addAll(genColumnConstraint(), genColumnConstraint())
         }
         for ((index, set) in dataSets.withIndex())
             grid.add(XYChart().apply { datasets.addAll(set) },
-                index and 1, (index shr 1) and 1)
+                    index and 1, (index shr 1) and 1)
         return grid
     }
 
@@ -37,13 +33,13 @@ object ShowCase {
         })
     }
 
-    fun multi(dataSets: List<List<DataSet>>): Stage {
+    fun multi(vararg dataSets: List<DataSet>): Stage {
         require(dataSets.count() == 4) {
             "Input must contain 4 data sets!"
         }
         return Stage().apply {
             title = "Chart"
-            scene = Scene(createLayout(dataSets))
+            scene = Scene(createLayout(*dataSets))
         }
     }
 }

@@ -8,7 +8,7 @@ import kotlin.math.min
 
 object Filter {
     fun antiShift(input: Line): Line {
-        val avg = LineStatistics.avg(input)
+        val avg = LineStatistics.mean(input)
         return Line(DoubleArray(input.size) {
             input.ys[it] - avg
         })
@@ -27,17 +27,15 @@ object Filter {
         return fixed
     }
 
-
     fun antiSpikeWindowed(input: Line, absRange: Double, windowSize: Int = 2): Line {
         val fixed = Line(input)
-        for (i in input.xs.indices) {
-            if (abs(fixed.ys[i]) > absRange) {
-                val winStart = max(0, i - windowSize)
-                val winEnd = min(input.size, i + windowSize)
-                val acc = (winStart until winEnd).sumByDouble {
+        for ((index, i) in fixed.ys.withIndex()) {
+            if (abs(i) > absRange) {
+                val winStart = max(0, index - windowSize)
+                val winEnd = min(input.size, index + windowSize)
+                fixed.ys[index] = (winStart until winEnd).sumByDouble {
                     min(max(-1.0, fixed.ys[it]), 1.0)
-                }
-                fixed.ys[i] = acc / (winEnd - winStart)
+                } / (winEnd - winStart)
             }
         }
         return fixed
@@ -52,6 +50,6 @@ object Filter {
             DoubleArray(input.size) {
                 val endIdx = min(it + windowSize, input.size)
                 val startIdx = max(0, it - windowSize)
-                LineStatistics.avg(input, startIdx, endIdx)
+                LineStatistics.mean(input, startIdx, endIdx)
             }
 }

@@ -2,12 +2,12 @@ package gui
 
 import core.Line
 import de.gsi.chart.XYChart
-import de.gsi.dataset.spi.DoubleDataSet
 import gui.component.inputTabs.*
 import gui.component.transformTabs.NormalizeTab
 import gui.component.transformTabs.ShiftTab
 import gui.component.transformTabs.SpikesTab
 import gui.component.transformTabs.StationarityTab
+import infrastructure.DataSetTransforms.dataSetSingle
 import javafx.event.EventHandler
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
@@ -80,9 +80,7 @@ class FXMLController : Initializable {
     private fun addToDataset(lines: List<Line>, chart: XYChart) {
         chart.datasets.clear()
         for ((i, l) in lines.withIndex()) {
-            val set = DoubleDataSet(i.toString())
-            l.addToDataSet(set)
-            chart.datasets.add(set)
+            chart.datasets.add(dataSetSingle(i.toString(), l).first())
         }
     }
 
