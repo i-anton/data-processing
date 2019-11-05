@@ -38,7 +38,7 @@ object CompositeStatistics {
             val end = min(start + intervalSize, line.size)
 
             disps[intervalIdx] = line.variance(start, end)
-            means[intervalIdx] = line.mean( start, end)
+            means[intervalIdx] = line.mean(start, end)
         }
 
         return (0 until intervalCount - 1).none {
@@ -67,7 +67,7 @@ object CompositeStatistics {
     }
 
     fun autoCorrelation(line: Line, start: Int = 0, end: Int = line.size): Line {
-        val avg = line.mean( start, end)
+        val avg = line.mean(start, end)
         val divider = (start until end)
                 .sumByDouble { (line.ys[it] - avg).pow(2.0) }
 
@@ -110,7 +110,6 @@ object CompositeStatistics {
         sqrt(sumReal * sumReal + sumImag * sumImag)
     }
 
-    fun Line.dftRemap(rate: Double): Line {
-        return Line(DoubleArray(size / 2) { it * rate / size }, ys.copyOf(size / 2))
-    }
+    fun Line.dftRemap(rate: Double) =
+            Line(DoubleArray(size / 2) { it * rate / size }, ys.copyOf(size / 2))
 }

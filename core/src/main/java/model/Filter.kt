@@ -9,9 +9,7 @@ import kotlin.math.min
 object Filter {
     fun Line.antiShift(): Line {
         val avg = mean()
-        return Line(DoubleArray(size) {
-            ys[it] - avg
-        })
+        return Line(DoubleArray(size) { ys[it] - avg })
     }
 
     fun Line.antiSpike(absRange: Double): Line {
@@ -43,7 +41,7 @@ object Filter {
 
     fun Line.antiTrend(windowSize: Int = 3): Line {
         val trendDetect = trendDetect(windowSize)
-        return Line(DoubleArray(size) { ys[it] - trendDetect[it] })
+        return Line(size) { ys[it] - trendDetect[it] }
     }
 
     fun Line.trendDetect(windowSize: Int = 3) =

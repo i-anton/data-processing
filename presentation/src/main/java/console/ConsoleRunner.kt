@@ -1,7 +1,7 @@
 package console
 
-import console.demo.DftWithDefects.dftHarmonicWithSpikes
+import console.demo.FloatArrayAnalysis.testLoad
 
 fun main() {
-    dftHarmonicWithSpikes()
+    testLoad()
 }

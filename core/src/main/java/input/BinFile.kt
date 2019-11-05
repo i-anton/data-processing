@@ -7,11 +7,11 @@ import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 
 object BinFile {
-    fun read(filename: String): Line =
+    fun readFloatsArray(filename: String): Line =
             FileChannel.open(Paths.get(filename), StandardOpenOption.READ).use {
-                val resArr = FloatArray(it.size().toInt())
+                val resArr = FloatArray(it.size().toInt()/4)
                 it.map(FileChannel.MapMode.READ_ONLY, 0, it.size())
-                        .order(ByteOrder.nativeOrder())
+                        .order(ByteOrder.LITTLE_ENDIAN)
                         .asFloatBuffer()
                         .get(resArr)
                 return Line(resArr)

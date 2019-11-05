@@ -11,10 +11,10 @@ class MainApp : Application() {
     @Throws(Exception::class)
     override fun start(stage: Stage) {
         val root = FXMLLoader.load<Parent>(javaClass.getResource("scene.fxml"))
-        val scene = Scene(root)
-        scene.stylesheets.add(javaClass.getResource("styles.css").toExternalForm())
         stage.title = "Data Processing"
-        stage.scene = scene
+        stage.scene = Scene(root).apply {
+            stylesheets.add(javaClass.getResource("styles.css").toExternalForm())
+        }
         stage.show()
     }
 }

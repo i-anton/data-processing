@@ -21,7 +21,11 @@ class ShiftTab : ParametersTab("Cмещение") {
     }
 
     override fun generateResult() = listOf(
-            inputLine.shift( start.text.toDouble(),
-                    end.text.toDouble(), shift.text.toDouble(), scale.text.toDouble())
+            inputLine.shift(
+                    start.text.toDouble(),
+                    end.text.toDouble(),
+                    shift.text.toDouble(),
+                    scale.text.toDouble()
+            )
     )
 }
