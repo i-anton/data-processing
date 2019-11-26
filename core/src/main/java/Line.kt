@@ -13,6 +13,9 @@ class Line constructor(
     constructor(size: Int, arrYGen: (Int) -> Double) :
             this(DoubleArray(size) { it.toDouble() }, DoubleArray(size, arrYGen))
 
+    constructor(arrXs: DoubleArray ,arrYGen: (Int) -> Double) :
+            this(arrXs.clone(), DoubleArray(arrXs.size, arrYGen))
+
     constructor(arrYs: FloatArray) :
             this(DoubleArray(arrYs.size) { it.toDouble() },
                     DoubleArray(arrYs.size) { arrYs[it].toDouble() })

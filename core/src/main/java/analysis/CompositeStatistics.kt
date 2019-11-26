@@ -2,6 +2,7 @@ package core.analysis
 
 import core.Line
 import java.util.*
+import javax.swing.text.html.HTML.Attribute.N
 import kotlin.math.*
 
 object CompositeStatistics {
@@ -111,9 +112,9 @@ object CompositeStatistics {
     }
 
     fun Line.dftRemap(rate: Double) =
-        Line(DoubleArray(size / 2) { it * rate / size }, ys.copyOf(size / 2))
+            Line(DoubleArray(size / 2) { it * rate / size }, ys.copyOf(size / 2))
 
-    fun Line.dftSeparate() : Pair<DoubleArray, DoubleArray> {
+    fun Line.dftSeparate(): Pair<DoubleArray, DoubleArray> {
         val reals = DoubleArray(size);
         val imags = DoubleArray(size);
         for (k in 0 until size) {
@@ -130,28 +131,38 @@ object CompositeStatistics {
         return Pair(reals, imags)
     }
 
-    fun toAmplitudes(data: Pair<DoubleArray, DoubleArray>) : Line {
+    fun toAmplitudes(data: Pair<DoubleArray, DoubleArray>): Line {
         val size = data.first.size
         val reals = data.first
         val imags = data.second
-        return Line(size){ k ->
+        return Line(size) { k ->
             val real = reals[k]
             val imag = imags[k]
             sqrt(real * real + imag * imag)
         }
     }
 
-    fun idft(data: Pair<DoubleArray, DoubleArray>) : Line {
+    fun idft(data: Pair<DoubleArray, DoubleArray>): Line {
         val size = data.first.size
         val reals = data.first
         val imags = data.second
-        return Line(size){ k ->
+        return Line(size) { k ->
             var sum = 0.0
             for (t in 0 until size) {
                 val angle = (2.0 * Math.PI * k * t) / size
                 sum += reals[t] * cos(angle) + imags[t] * sin(angle)
             }
             sum
+        }
+    }
+
+    fun Line.hammingWindowed(alpha : Double = 0.46) =
+            Line(xs) { ys[it] * (alpha - (1.0 - alpha) * cos(2.0 * Math.PI * it / size)) }
+
+    fun Line.zero(from: Int, to: Int = size) = Line(xs) {
+        when {
+            (it >= from) and (it <= to) -> 0.0
+            else -> ys[it]
         }
     }
 }
