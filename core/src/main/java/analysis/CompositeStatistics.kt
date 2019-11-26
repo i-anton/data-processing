@@ -59,9 +59,9 @@ object CompositeStatistics {
                 if ((j >= start) and (j <= end))
                     map[end] = map.getOrDefault(end, 0) + 1
         }
-        val ys = map.keys.toDoubleArray()
-        val xs = DoubleArray(intervalsCount) {
-            map.getOrDefault(ys[it], 0).toDouble()
+        val xs = map.keys.toDoubleArray()
+        val ys = DoubleArray(intervalsCount) {
+            map.getOrDefault(xs[it], 0).toDouble()
         }
         return Line(xs, ys)
     }
@@ -111,5 +111,47 @@ object CompositeStatistics {
     }
 
     fun Line.dftRemap(rate: Double) =
-            Line(DoubleArray(size / 2) { it * rate / size }, ys.copyOf(size / 2))
+        Line(DoubleArray(size / 2) { it * rate / size }, ys.copyOf(size / 2))
+
+    fun Line.dftSeparate() : Pair<DoubleArray, DoubleArray> {
+        val reals = DoubleArray(size);
+        val imags = DoubleArray(size);
+        for (k in 0 until size) {
+            var sumReal = 0.0
+            var sumImag = 0.0
+            for (t in 0 until size) {
+                val angle = (2.0 * Math.PI * k * t) / size
+                sumReal += ys[t] * cos(angle)
+                sumImag += ys[t] * sin(angle)
+            }
+            reals[k] = sumReal / size
+            imags[k] = sumImag / size
+        }
+        return Pair(reals, imags)
+    }
+
+    fun toAmplitudes(data: Pair<DoubleArray, DoubleArray>) : Line {
+        val size = data.first.size
+        val reals = data.first
+        val imags = data.second
+        return Line(size){ k ->
+            val real = reals[k]
+            val imag = imags[k]
+            sqrt(real * real + imag * imag)
+        }
+    }
+
+    fun idft(data: Pair<DoubleArray, DoubleArray>) : Line {
+        val size = data.first.size
+        val reals = data.first
+        val imags = data.second
+        return Line(size){ k ->
+            var sum = 0.0
+            for (t in 0 until size) {
+                val angle = (2.0 * Math.PI * k * t) / size
+                sum += reals[t] * cos(angle) + imags[t] * sin(angle)
+            }
+            sum
+        }
+    }
 }

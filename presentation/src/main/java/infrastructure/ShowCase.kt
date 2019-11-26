@@ -1,6 +1,7 @@
 package infrastructure
 
 import de.gsi.chart.XYChart
+import de.gsi.chart.plugins.Zoomer
 import de.gsi.dataset.DataSet
 import javafx.scene.Parent
 import javafx.scene.Scene
@@ -21,8 +22,10 @@ object ShowCase {
             columnConstraints.addAll(genColumnConstraint(), genColumnConstraint())
         }
         for ((index, set) in dataSets.withIndex())
-            grid.add(XYChart().apply { datasets.addAll(set) },
-                    index and 1, (index shr 1) and 1)
+            grid.add(XYChart().apply {
+                datasets.addAll(set)
+                plugins.addAll(Zoomer())
+            }, index and 1, (index shr 1) and 1)
         return grid
     }
 

@@ -16,6 +16,6 @@ class MyRandomParametersTab : ParametersTab("Cлучайный+") {
     }
 
     override fun generateResult() = listOf(
-            LineGenerator.myRandom(dots.text.toInt(), seed.text.toInt())
+            LineGenerator.myRandom(dots.text.toInt())
     )
 }

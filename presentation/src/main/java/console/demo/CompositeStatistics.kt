@@ -3,7 +3,9 @@ package console.demo
 import core.analysis.CompositeStatistics.autoCorrelation
 import core.analysis.CompositeStatistics.crossCorrelation
 import core.analysis.CompositeStatistics.isStationary
+import core.analysis.CompositeStatistics.valuesDistribution
 import core.input.LineGenerator.linear
+import core.input.LineGenerator.myRandom
 import core.input.LineGenerator.random
 import infrastructure.DataSetTransforms.dataSetSingle
 import infrastructure.ShowCase
@@ -34,6 +36,20 @@ object CompositeStatistics {
         val initialRand = random(100)
         val stats = autoCorrelation(initialRand)
         val statsRand = crossCorrelation(initialRand, initialRand)
+        Platform.startup {
+            ShowCase.multi(
+                    dataSetSingle("auto(line)", stats),
+                    dataSetSingle("line", initial),
+                    dataSetSingle("cross(line,random)", statsRand),
+                    dataSetSingle("random", initialRand)
+            ).show()
+        }
+    }
+    fun valuesDistributionDemo() {
+        val initial = myRandom(1000, 1.0, 0.0)
+        val initialRand = random(1000)
+        val stats = valuesDistribution(initial,5)
+        val statsRand = valuesDistribution(initialRand, 5)
         Platform.startup {
             ShowCase.multi(
                     dataSetSingle("auto(line)", stats),
