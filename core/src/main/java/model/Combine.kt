@@ -37,6 +37,27 @@ object Combine {
             resultLine.ys[i] = f.apply(resultLine.ys[i], copyFrom.ys[i])
         return resultLine
     }
+
+    fun convolution(one: Line, other: Line) = Line(one.xs, other.ys)
+
+    fun convolution(one: Line, other: DoubleArray) = Line(one.xs, convolution(one.ys, other))
+
+    fun convolution(one: DoubleArray, other: DoubleArray): DoubleArray {
+        val n = one.size
+        val m = other.size
+        return DoubleArray(n) {
+            when (it) {
+                in 0 until n + m - 1 -> {
+                    var result = 0.0
+                    for (j in 0 until m) if (it - j in 1 until n) {
+                        result += one[it - j] * other[j]
+                    }
+                    result
+                }
+                else -> 0.0
+            }
+        }
+    }
 }
 
 infix fun Line.add(other: Line) = Combine.additive(this, other)

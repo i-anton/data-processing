@@ -4,6 +4,8 @@ import core.analysis.CompositeStatistics.autoCorrelation
 import core.analysis.CompositeStatistics.crossCorrelation
 import core.analysis.CompositeStatistics.dft
 import core.analysis.CompositeStatistics.dftRemap
+import core.analysis.CompositeStatistics.dftSeparate
+import core.analysis.CompositeStatistics.idft
 import core.input.BinFile
 import core.input.LineGenerator.harmonic
 import core.model.add
@@ -33,6 +35,23 @@ object FloatArrayAnalysis {
                     dataSetSingle("dft", some),
                     dataSetSingle("dftRemap", dftRemapped),
                     dataSetSingle("combined", crossCorrelation(data, some))
+            ).show()
+        }
+    }
+
+    fun autoCorrelationCrossWithInverse() {
+        val path = javaClass.getResource("pgp_f4-1K-1ms.dat").path
+        val data = BinFile.readFloatsArray(path)
+
+        val combined = harmonic(1000, 5.0, 15.0) add
+                harmonic(1000, 10.0, 45.0)
+        val idft = idft(combined.dftSeparate())
+        Platform.startup {
+            ShowCase.multi(
+                    dataSetSingle("data", data),
+                    dataSetSingle("idft", idft),
+                    dataSetSingle("autoCorrelation", autoCorrelation(data)),
+                    dataSetSingle("crossCorrelation", crossCorrelation(data, idft))
             ).show()
         }
     }
