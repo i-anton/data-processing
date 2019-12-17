@@ -15,23 +15,23 @@ object PassFilters {
         for (i in 1 until result.size) result[i] = sin(param * i) / (PI * i)
         result[size] /= 2.0
 
+        result[0] *= SMOOTH_WINDOW_P310.sumByDouble { it } * 2.0
         var sumg = result[0]
         for (i in 1 until result.size) {
-            var sum = SMOOTH_WINDOW_P310[0] * 2.0
             val arg = (PI * i) / size
-            for (k in 1 until SMOOTH_WINDOW_P310.size) sum += 2.0 * SMOOTH_WINDOW_P310[k] * cos(arg * k)
-            result[i] *= sum
+            val sum = SMOOTH_WINDOW_P310[0] +
+                    (1 until SMOOTH_WINDOW_P310.size).sumByDouble { SMOOTH_WINDOW_P310[it] * cos(arg * it) }
+            result[i] *= sum * 2.0
             sumg += result[i] * 2.0
         }
-        for (i in result.indices) result[i] = (result[i] / sumg)
+        for (i in result.indices) result[i] /= sumg
         return result
     }
 
     fun lowPassFilter(size: Int, dt: Double, fCut: Double): DoubleArray {
         val result = DoubleArray(2 * size + 1)
-        val halfLowPass = halfLowPassFilter(size, dt, fCut)
-        halfLowPass.copyInto(result, size)
-        for (i in 0..size+1) result[i] = result[result.size - i - 1]
+        halfLowPassFilter(size, dt, fCut).apply { copyInto(result, size) }
+        for (i in 0..size) result[i] = result[result.size - i - 1]
         return result
     }
 

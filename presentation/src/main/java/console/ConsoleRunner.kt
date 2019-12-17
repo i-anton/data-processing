@@ -1,9 +1,6 @@
 package console
 
-import console.demo.PassFilters.highLowPassFilterDft
-import console.demo.PassFilters.showFiltersDemo
-import console.demo.PassFilters.showFiltersDftDemo
+import console.demo.AudioModify.openAudioFile
+import console.demo.FloatArrayAnalysis.filtersDemo
 
-fun main() {
-    showFiltersDftDemo()
-}
+fun main() = openAudioFile()
