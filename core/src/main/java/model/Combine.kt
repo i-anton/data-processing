@@ -3,12 +3,24 @@ package core.model
 import core.Line
 import core.input.LineGenerator
 import java.util.function.BiFunction
+import java.util.function.DoubleFunction
 
 object Combine {
 
     fun additive(one: Line, other: Line) = lineCombine(one, other, BiFunction { x, y -> x + y })
 
+    fun additive(one: Line, other: Double) = lineApply(one, DoubleFunction { y -> other + y })
+
     fun multiplicative(one: Line, other: Line) = lineCombine(one, other, BiFunction { x, y -> x * y })
+
+    fun multiplicative(one: Line, other: Double) = lineApply(one, DoubleFunction { y -> y * other })
+
+    private fun lineApply(one: Line, f: DoubleFunction<Double>): Line {
+        val resultLine = Line(one)
+        for (i in 0 until one.size)
+            resultLine.ys[i] = f.apply(resultLine.ys[i])
+        return resultLine
+    }
 
     private fun average(lines: List<Line>): Line {
         require(lines.all { line -> line.size == lines.first().size })
@@ -61,5 +73,7 @@ object Combine {
 }
 
 infix fun Line.add(other: Line) = Combine.additive(this, other)
-
 infix fun Line.mul(other: Line) = Combine.multiplicative(this, other)
+
+infix fun Line.mul(number: Double) = Combine.multiplicative(this, number)
+infix fun Line.add(number: Double) = Combine.additive(this, number)
