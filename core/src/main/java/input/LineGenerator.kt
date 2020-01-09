@@ -1,9 +1,9 @@
 package core.input
 
 import core.Line
-import java.util.*
 import kotlin.math.exp
 import kotlin.math.sin
+import kotlin.random.Random
 
 object LineGenerator {
     fun linear(dots: Int, angle: Double, offset: Double)

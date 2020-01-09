@@ -1,8 +1,6 @@
 package core.analysis
 
 import core.Line
-import java.util.*
-import javax.swing.text.html.HTML.Attribute.N
 import kotlin.math.*
 
 object CompositeStatistics {
@@ -52,19 +50,18 @@ object CompositeStatistics {
         val min = line.min()
         val max = line.max()
         val step = (max - min) / intervalsCount
-        val map = TreeMap<Double, Int>()
-        repeat(intervalsCount) {
+        val ys = DoubleArray(intervalsCount) {
             val start = min + step * it
             val end = start + step
+            var count = 0.0
             for (j in line.ys)
-                if ((j >= start) and (j <= end))
-                    map[end] = map.getOrDefault(end, 0) + 1
+                if (j in start..end)
+                    count++
+            count
         }
-        val xs = map.keys.toDoubleArray()
-        val ys = DoubleArray(intervalsCount) {
-            map.getOrDefault(xs[it], 0).toDouble()
-        }
-        return Line(xs, ys)
+        return Line(intervalsCount,  {
+            min + step * (it + 1)
+        }, ys)
     }
 
     fun autoCorrelation(line: Line, start: Int = 0, end: Int = line.size): Line {
@@ -98,12 +95,15 @@ object CompositeStatistics {
     }
 
     fun Line.dft() = Line(size) { k ->
+        val multiplier = (2.0 * Math.PI * k) / size
         var sumReal = 0.0
         var sumImag = 0.0
-        for (t in 0 until size) {
-            val angle = (2.0 * Math.PI * k * t) / size
-            sumReal += ys[t] * cos(angle)
-            sumImag += ys[t] * sin(angle)
+        ys.forEachIndexed { t, y ->
+            val angle = multiplier * t
+            val cos = cos(angle)
+            val sin = sin(angle)
+            sumReal += y * cos
+            sumImag += y * sin
         }
         sumReal /= size
         sumImag /= size
@@ -112,18 +112,19 @@ object CompositeStatistics {
     }
 
     fun Line.dftRemap(rate: Double) =
-            Line(DoubleArray(size / 2) { it * rate / size }, ys.copyOf(size / 2))
+            Line(size / 2, { it * rate / size }, ys)
 
     fun Line.dftSeparate(): Pair<DoubleArray, DoubleArray> {
-        val reals = DoubleArray(size);
-        val imags = DoubleArray(size);
+        val reals = DoubleArray(size)
+        val imags = DoubleArray(size)
         for (k in 0 until size) {
+            val multiplier = (2.0 * Math.PI * k) / size
             var sumReal = 0.0
             var sumImag = 0.0
-            for (t in 0 until size) {
-                val angle = (2.0 * Math.PI * k * t) / size
-                sumReal += ys[t] * cos(angle)
-                sumImag += ys[t] * sin(angle)
+            ys.forEachIndexed { t, y ->
+                val angle = multiplier * t
+                sumReal += y * cos(angle)
+                sumImag += y * sin(angle)
             }
             reals[k] = sumReal / size
             imags[k] = sumImag / size
@@ -147,16 +148,17 @@ object CompositeStatistics {
         val reals = data.first
         val imags = data.second
         return Line(size) { k ->
+            val multiplier = (2.0 * Math.PI * k) / size
             var sum = 0.0
             for (t in 0 until size) {
-                val angle = (2.0 * Math.PI * k * t) / size
+                val angle = multiplier * t
                 sum += reals[t] * cos(angle) + imags[t] * sin(angle)
             }
             sum
         }
     }
 
-    fun Line.hammingWindowed(alpha : Double = 0.46) =
+    fun Line.hammingWindowed(alpha: Double = 0.46) =
             Line(xs) { ys[it] * (alpha - (1.0 - alpha) * cos(2.0 * Math.PI * it / size)) }
 
     fun Line.zero(from: Int, to: Int = size) = Line(xs) {

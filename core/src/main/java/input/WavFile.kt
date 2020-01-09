@@ -59,7 +59,7 @@ object WavFile {
     private fun readMeta(bu: BufferedInputStream): WavMeta {
         val intBuffer = ByteArray(4)
         // header chunk
-        val headerData = ByteArray(12) // "RIFFSIZEWAVE"
+        val headerData = ByteArray(12) // "RIFF SIZE WAVE"
         // TODO: add validation of input format
         bu.read(headerData)
         // fmt chunk

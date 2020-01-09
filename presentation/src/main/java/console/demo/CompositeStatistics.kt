@@ -46,10 +46,10 @@ object CompositeStatistics {
         }
     }
     fun valuesDistributionDemo() {
-        val initial = myRandom(1000, 1.0, 0.0)
-        val initialRand = random(1000)
-        val stats = valuesDistribution(initial,5)
-        val statsRand = valuesDistribution(initialRand, 5)
+        val initial = myRandom(10000, 1.0, 0.0)
+        val initialRand = random(10000)
+        val stats = valuesDistribution(initial,10)
+        val statsRand = valuesDistribution(initialRand, 10)
         Platform.startup {
             ShowCase.multi(
                     dataSetSingle("auto(line)", stats),

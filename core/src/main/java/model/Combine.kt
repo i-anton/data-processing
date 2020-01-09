@@ -2,23 +2,21 @@ package core.model
 
 import core.Line
 import core.input.LineGenerator
-import java.util.function.BiFunction
-import java.util.function.DoubleFunction
 
 object Combine {
 
-    fun additive(one: Line, other: Line) = lineCombine(one, other, BiFunction { x, y -> x + y })
+    fun additive(one: Line, other: Line) = lineCombine(one, other) { x, y -> x + y }
 
-    fun additive(one: Line, other: Double) = lineApply(one, DoubleFunction { y -> other + y })
+    fun additive(one: Line, other: Double) = lineApply(one) { y -> other + y }
 
-    fun multiplicative(one: Line, other: Line) = lineCombine(one, other, BiFunction { x, y -> x * y })
+    fun multiplicative(one: Line, other: Line) = lineCombine(one, other) { x, y -> x * y }
 
-    fun multiplicative(one: Line, other: Double) = lineApply(one, DoubleFunction { y -> y * other })
+    fun multiplicative(one: Line, other: Double) = lineApply(one) { y -> y * other }
 
-    private fun lineApply(one: Line, f: DoubleFunction<Double>): Line {
+    private fun lineApply(one: Line, f: (Double) -> Double): Line {
         val resultLine = Line(one)
         for (i in 0 until one.size)
-            resultLine.ys[i] = f.apply(resultLine.ys[i])
+            resultLine.ys[i] = f(resultLine.ys[i])
         return resultLine
     }
 
@@ -35,7 +33,7 @@ object Combine {
             }
     )
 
-    private fun lineCombine(one: Line, other: Line, f: BiFunction<Double, Double, Double>): Line {
+    private fun lineCombine(one: Line, other: Line, f: (Double, Double) -> Double): Line {
         val isOne = one.size > other.size
         val resultLine: Line = when {
             isOne -> Line(one)
@@ -46,7 +44,7 @@ object Combine {
             else -> one
         }
         for (i in 0 until copyFrom.size)
-            resultLine.ys[i] = f.apply(resultLine.ys[i], copyFrom.ys[i])
+            resultLine.ys[i] = f(resultLine.ys[i], copyFrom.ys[i])
         return resultLine
     }
 
@@ -57,17 +55,12 @@ object Combine {
     fun convolution(one: DoubleArray, other: DoubleArray): DoubleArray {
         val n = one.size
         val m = other.size
-        return DoubleArray(n) {
-            when (it) {
-                in 0 until n + m - 1 -> {
-                    var result = 0.0
-                    for (j in 0 until m) if (it - j in 1 until n) {
-                        result += one[it - j] * other[j]
-                    }
-                    result
-                }
-                else -> 0.0
+        return DoubleArray(n + m) {
+            var result = 0.0
+            for (j in other.indices) if (it - j in one.indices) {
+                result += other[j] * one[it - j]
             }
+            result
         }
     }
 }

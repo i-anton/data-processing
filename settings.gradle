@@ -1,1 +1,1 @@
-include 'presentation', 'core'
+include 'hydroacoustic', 'presentation', 'core'

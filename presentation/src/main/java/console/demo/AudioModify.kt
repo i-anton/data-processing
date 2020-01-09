@@ -18,15 +18,26 @@ object AudioModify {
         val data = readFromFile(path)
 
         val line = Line(data.second)
-        writeToFile("macopy2.wav", data.first, data.second)
-        val dataRestored = readFromFile("macopy2.wav")
+        val writeTo = "macopy2.wav"
+        writeToFile(writeTo, data.first, data.second)
+        val dataRestored = readFromFile(writeTo)
         val lineRestored = Line(dataRestored.second)//.mul(2.0)
+        var start = System.nanoTime()
+        val initialDft = line.dft()
+        var end = System.nanoTime()
+        initialDft.dftRemap(data.first.sampleRate.toDouble())
+        println(end - start)
+        start = System.nanoTime()
+        val restoredDft = lineRestored.dft().dftRemap(data.first.sampleRate.toDouble())
+        end = System.nanoTime()
+        println(end - start)
+
         Platform.startup {
             ShowCase.multi(
                     DataSetTransforms.dataSetSingle("file", line),
                     DataSetTransforms.dataSetSingle("opened", lineRestored),
-                    DataSetTransforms.dataSetSingle("file", line.dft().dftRemap(data.first.sampleRate.toDouble())),
-                    DataSetTransforms.dataSetSingle("opened", lineRestored.dft().dftRemap(data.first.sampleRate.toDouble()))
+                    DataSetTransforms.dataSetSingle("file", initialDft),
+                    DataSetTransforms.dataSetSingle("opened", restoredDft)
             ).show()
         }
 
