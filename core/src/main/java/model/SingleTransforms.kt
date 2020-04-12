@@ -2,6 +2,7 @@ package core.model
 
 import core.Line
 import core.input.anySeed
+import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
@@ -49,5 +50,15 @@ object SingleTransforms {
             result.ys[i] = result.ys[i] * scale + shift
         }
         return result
+    }
+
+    fun Line.hammingWindowed(alpha: Double = 0.46) =
+            Line(xs) { ys[it] * (alpha - (1.0 - alpha) * cos(2.0 * Math.PI * it / size)) }
+
+    fun Line.zero(from: Int, to: Int = size) = Line(xs) {
+        when {
+            (it >= from) and (it <= to) -> 0.0
+            else -> ys[it]
+        }
     }
 }

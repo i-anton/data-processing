@@ -1,8 +1,8 @@
 package console.demo
 
 import core.Line
-import core.analysis.CompositeStatistics.dftRemap
-import core.analysis.CompositeStatistics.dft
+import core.analysis.Fourier.dftRemap
+import core.analysis.Fourier.dft
 import core.analysis.max
 import core.input.PassFilters
 import infrastructure.DataSetTransforms

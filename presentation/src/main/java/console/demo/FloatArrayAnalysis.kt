@@ -1,16 +1,15 @@
 package console.demo
 
-import core.Line
-import core.analysis.CompositeStatistics.autoCorrelation
-import core.analysis.CompositeStatistics.crossCorrelation
-import core.analysis.CompositeStatistics.dft
-import core.analysis.CompositeStatistics.dftRemap
-import core.analysis.CompositeStatistics.dftSeparate
-import core.analysis.CompositeStatistics.idft
+import core.analysis.Correlation.autoCorrelation
+import core.analysis.Correlation.crossCorrelation
+import core.analysis.Convolution.convolution
+import core.analysis.Fourier.dft
+import core.analysis.Fourier.dftRemap
+import core.analysis.Fourier.dftSeparate
+import core.analysis.Fourier.idft
 import core.input.BinFile
 import core.input.LineGenerator.harmonic
 import core.input.PassFilters
-import core.model.Combine.convolution
 import core.model.add
 import infrastructure.DataSetTransforms.dataSetSingle
 import infrastructure.ShowCase
@@ -19,7 +18,7 @@ import javafx.application.Platform
 object FloatArrayAnalysis {
     fun testLoad() {
         val path = javaClass.getResource("pgp_f4-1K-1ms.dat").path
-        val data = BinFile.readFloatsArray(path)
+        val data = BinFile.readFloatsLine(path)
         val dft = data.dft()
         val dftRemapped = dft.dftRemap(1000.0)
         val amplitudesFrequenciesPairs = (0 until dftRemapped.size)
@@ -44,7 +43,7 @@ object FloatArrayAnalysis {
 
     fun correlationDemo() {
         val path = javaClass.getResource("pgp_f4-1K-1ms.dat").path
-        val data = BinFile.readFloatsArray(path)
+        val data = BinFile.readFloatsLine(path)
 
         val combined = harmonic(1000, 5.0, 15.0) add
                 harmonic(1000, 10.0, 45.0)
@@ -61,7 +60,7 @@ object FloatArrayAnalysis {
 
     fun filtersDemo() {
         val path = javaClass.getResource("pgp_f4-1K-1ms.dat").path
-        val data = BinFile.readFloatsArray(path)
+        val data = BinFile.readFloatsLine(path)
         val size = 64
         val dt = 0.001
 

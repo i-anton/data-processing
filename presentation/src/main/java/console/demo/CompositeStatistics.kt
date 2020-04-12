@@ -1,7 +1,7 @@
 package console.demo
 
-import core.analysis.CompositeStatistics.autoCorrelation
-import core.analysis.CompositeStatistics.crossCorrelation
+import core.analysis.Correlation.autoCorrelation
+import core.analysis.Correlation.crossCorrelation
 import core.analysis.CompositeStatistics.isStationary
 import core.analysis.CompositeStatistics.valuesDistribution
 import core.input.LineGenerator.linear

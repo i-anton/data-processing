@@ -17,8 +17,6 @@ javafx {
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
-mainClassName = 'hydroacoustic.MainAppKt'
-
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }

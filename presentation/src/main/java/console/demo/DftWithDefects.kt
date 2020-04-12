@@ -1,8 +1,8 @@
 package console.demo
 
-import core.analysis.CompositeStatistics.autoCorrelation
-import core.analysis.CompositeStatistics.dft
-import core.analysis.CompositeStatistics.dftRemap
+import core.analysis.Correlation.autoCorrelation
+import core.analysis.Fourier.dft
+import core.analysis.Fourier.dftRemap
 import core.input.LineGenerator.harmonic
 import core.input.LineGenerator.linear
 import core.input.LineGenerator.random

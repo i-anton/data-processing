@@ -1,12 +1,12 @@
 package console.demo
 
-import core.analysis.CompositeStatistics.dftSeparate
-import core.analysis.CompositeStatistics.dft
-import core.analysis.CompositeStatistics.idft
-import core.analysis.CompositeStatistics.dftRemap
-import core.analysis.CompositeStatistics.toAmplitudes
-import core.analysis.CompositeStatistics.hammingWindowed
-import core.analysis.CompositeStatistics.zero
+import core.analysis.Fourier.dftSeparate
+import core.analysis.Fourier.dft
+import core.analysis.Fourier.idft
+import core.analysis.Fourier.dftRemap
+import core.analysis.Fourier.toAmplitudes
+import core.model.SingleTransforms.hammingWindowed
+import core.model.SingleTransforms.zero
 import core.input.LineGenerator
 import core.model.add
 import infrastructure.DataSetTransforms

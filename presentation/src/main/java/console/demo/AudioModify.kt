@@ -1,13 +1,10 @@
 package console.demo
 
 import core.Line
-import core.analysis.CompositeStatistics.dft
-import core.analysis.CompositeStatistics.dftRemap
-import core.input.PassFilters
+import core.analysis.Fourier.dft
+import core.analysis.Fourier.dftRemap
 import core.input.WavFile.readFromFile
 import core.input.WavFile.writeToFile
-import core.model.Combine
-import core.model.mul
 import infrastructure.DataSetTransforms
 import infrastructure.ShowCase
 import javafx.application.Platform

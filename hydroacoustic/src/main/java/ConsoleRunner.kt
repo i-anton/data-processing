@@ -1,13 +1,12 @@
 import core.Line
+import core.analysis.Convolution.convolution
 import core.analysis.max
 import core.input.PassFilters
-import core.model.Combine
 import infrastructure.DataSetTransforms
 import infrastructure.ShowCase
 import javafx.application.Platform
 import kotlin.math.*
 import kotlin.random.Random
-import core.analysis.CompositeStatistics.dft
 
 const val PI_DOUBLED = PI * 2.0
 
@@ -87,7 +86,7 @@ fun noisify(data: Line, distance: Double, frequency: Double): Line {
 
 fun Line.amplitudeShiftKeyingDemodulation(dt: Double = 0.000001): Line {
     val kernelSize = 32
-    val bpfApply = Combine.convolution(rectify(),
+    val bpfApply = convolution(rectify(),
             PassFilters.lowPassFilter(kernelSize, dt, 2.0))
     val size = size
     val threshold = bpfApply.max() / 2.0
@@ -106,12 +105,12 @@ fun Line.frequencyShiftKeyingDemodulation(carrierFrequencyOn: Double,
                                           dt: Double = 0.000001): Line {
     val kernelSize = 32
     val smoothingThreshold = 50.0
-    val filteredOn = Combine.convolution(Combine.convolution(this,
+    val filteredOn = convolution(convolution(this,
             PassFilters.bandPassFilter(kernelSize, dt, carrierFrequencyOn - frequencyDelta,
                     carrierFrequencyOn + frequencyDelta)).rectify(),
             PassFilters.lowPassFilter(kernelSize, dt, smoothingThreshold))
 
-    val filteredOff = Combine.convolution(Combine.convolution(this,
+    val filteredOff = convolution(convolution(this,
             PassFilters.bandPassFilter(kernelSize, dt, carrierFrequencyOff - frequencyDelta,
                     carrierFrequencyOff + frequencyDelta)).rectify(),
             PassFilters.lowPassFilter(kernelSize, dt, smoothingThreshold))
@@ -133,8 +132,8 @@ fun Line.phaseShiftKeyingDemodulation(carrierFrequency: Double,
                                       dt: Double = 0.000001): Line {
 
     val kernelSize = 32
-    val filteredOn = Combine.convolution(
-            Combine.convolution(this,
+    val filteredOn = convolution(
+            convolution(this,
                     PassFilters.bandPassFilter(kernelSize, dt, carrierFrequency - frequencyDelta,
                             carrierFrequency + frequencyDelta)).rectify(),
             PassFilters.lowPassFilter(kernelSize, dt, 10.0))
@@ -239,18 +238,18 @@ fun main() {
                 DataSetTransforms.dataSetSingle("raw", data)
         ).show()
     }
-//    val dataTransforms = listOf(
-//            Pair({ line: Line ->
-//                line.phaseShiftKeyingModulation(carrierFrequencyMain, carrierAmplitude, 0.0, PI)
-//            }, { line: Line -> line.phaseShiftKeyingDemodulation(carrierFrequencyMain) }),
-//            Pair({ line: Line -> line.amplitudeShiftKeyingModulation(carrierFrequencyMain, carrierAmplitude) },
-//                    { line: Line -> line.amplitudeShiftKeyingDemodulation() }),
-//            Pair({ line: Line ->
-//                line.frequencyShiftKeyingModulation(carrierFrequencyMain,
-//                        carrierFrequencySecondary, carrierAmplitude)
-//            }, { line: Line -> line.frequencyShiftKeyingDemodulation(carrierFrequencyMain, carrierFrequencySecondary) })
-//    )
-//
-//    val transform = dataTransforms[2]
-//    modulationDemo(n, 1.0, carrierFrequencyMain, transform.first, transform.second)
+    val dataTransforms = listOf(
+            Pair({ line: Line ->
+                line.phaseShiftKeyingModulation(carrierFrequencyMain, carrierAmplitude, 0.0, PI)
+            }, { line: Line -> line.phaseShiftKeyingDemodulation(carrierFrequencyMain) }),
+            Pair({ line: Line -> line.amplitudeShiftKeyingModulation(carrierFrequencyMain, carrierAmplitude) },
+                    { line: Line -> line.amplitudeShiftKeyingDemodulation() }),
+            Pair({ line: Line ->
+                line.frequencyShiftKeyingModulation(carrierFrequencyMain,
+                        carrierFrequencySecondary, carrierAmplitude)
+            }, { line: Line -> line.frequencyShiftKeyingDemodulation(carrierFrequencyMain, carrierFrequencySecondary) })
+    )
+
+    val transform = dataTransforms[2]
+    modulationDemo(n, 1.0, carrierFrequencyMain, transform.first, transform.second)
 }

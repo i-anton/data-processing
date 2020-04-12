@@ -1,7 +1,7 @@
 package console.demo
 
-import core.analysis.CompositeStatistics.dft
-import core.analysis.CompositeStatistics.dftRemap
+import core.analysis.Fourier.dft
+import core.analysis.Fourier.dftRemap
 import core.input.LineGenerator.harmonic
 import infrastructure.DataSetTransforms.dataSetSingle
 import infrastructure.ShowCase
