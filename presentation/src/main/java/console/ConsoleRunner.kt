@@ -1,5 +1,5 @@
 package console
 
-import console.demo.ImageDeconvolutionDemo
+import console.demo.FrequencyContourDemo.checkLpfContourExtraction
 
-fun main() = ImageDeconvolutionDemo.demoWithNoise()
+fun main() = checkLpfContourExtraction()

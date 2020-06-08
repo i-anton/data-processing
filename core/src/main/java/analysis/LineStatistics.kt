@@ -12,8 +12,11 @@ private fun statisticsMoment(order: Int, line: Line, startIdx: Int = 0, endIdx: 
             (endIdx - startIdx)
 }
 
+fun DoubleArray.mean(startIdx: Int = 0, endIdx: Int = this.size) =
+        (startIdx until endIdx).sumByDouble { this[it] } / (endIdx - startIdx)
+
 fun Line.mean(startIdx: Int = 0, endIdx: Int = this.size) =
-        (startIdx until endIdx).sumByDouble { this.ys[it] } / (endIdx - startIdx)
+        this.ys.mean(startIdx, endIdx)
 
 fun Line.stdAbsDev(startIdx: Int = 0, endIdx: Int = this.size): Double {
     val avg = mean(startIdx, endIdx)

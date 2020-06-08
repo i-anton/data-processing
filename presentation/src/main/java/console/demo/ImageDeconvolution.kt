@@ -1,23 +1,16 @@
 package console.demo
 
-import core.Line
-import core.analysis.Convolution.div
-import core.analysis.Convolution.mul
-import core.analysis.Convolution.add
-import core.analysis.Correlation.autoCorrelation
 import core.analysis.Fourier.dft
 import core.analysis.Fourier.idftD
-import core.analysis.Fourier.toAmplitudes
 import core.input.BinFile
 import core.input.ImageJPEG.toBufferedImage
-import infrastructure.DataSetTransforms.dataSetMulti
-import infrastructure.DataSetTransforms.dataSetSingle
-import infrastructure.ShowCase
-import javafx.application.Platform
+import core.model.sum
+import core.model.div
+import core.model.mul
 import java.io.File
 import javax.imageio.ImageIO
 
-object ImageDeconvolutionDemo {
+object ImageDeconvolution {
     fun demoWithoutNoise() {
         val width = 259
         val height = 185
@@ -68,11 +61,13 @@ object ImageDeconvolutionDemo {
         val alpha = 0.000016
         // Optimal filter
         val kernelFt = dft(kernel)
-        val square = (kernelFt.first.mul(kernelFt.first))
-                .add(kernelFt.second.mul(kernelFt.second))
-                .add(alpha)
-        val filter = Pair(kernelFt.first.div(square),
-                kernelFt.second.mul(-1.0).div(square)
+        val square = kernelFt.first.mul(kernelFt.first)
+                .sum(kernelFt.second.mul(kernelFt.second))
+                .sum(alpha)
+        val filter = Pair(
+                kernelFt.first.div(square),
+                kernelFt.second.mul(-1.0)
+                        .div(square)
         )
 //        Platform.startup {
 //            ShowCase.single(

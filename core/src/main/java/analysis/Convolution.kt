@@ -1,116 +1,24 @@
 package core.analysis
 
 import core.Line
-import core.analysis.Convolution.add
-import core.analysis.Convolution.mul
 import core.analysis.Fourier.dftSeparate
 import core.analysis.Fourier.idft
+import core.model.div
 
 object Convolution {
-    fun Line.deconvolution(other: Line): Line {
-        val dft = this.dftSeparate() //a + ib
-        val dft2 = other.dftSeparate() // c + id
-
-        val newLineRe = DoubleArray(this.size)
-        val newLineIm = DoubleArray(this.size)
-        for (i in newLineRe.indices) {
-            val a = dft.first[i]
-            val b = dft.second[i]
-            val c = dft2.first[i]
-            val d = dft2.second[i]
-            newLineRe[i] = (a * c + b * d) /
-                    (c * c + d * d)
-
-            newLineIm[i] = (b * c - a * d) /
-                    (c * c + d * d)
-        }
-
-        return idft(Pair(newLineRe, newLineIm))
-    }
-
-    fun div(first: Pair<DoubleArray, DoubleArray>, second: Pair<DoubleArray, DoubleArray>)
-            : Pair<DoubleArray, DoubleArray> {
-        val size = first.first.size
-        val newLineRe = DoubleArray(size)
-        val newLineIm = DoubleArray(size)
-        for (i in newLineRe.indices) {
-            val a = first.first[i]
-            val b = first.second[i]
-            val c = second.first[i]
-            val d = second.second[i]
-            newLineRe[i] = (a * c + b * d) /
-                    (c * c + d * d)
-
-            newLineIm[i] = (b * c - a * d) /
-                    (c * c + d * d)
-        }
-        return Pair(newLineRe, newLineIm)
-    }
-
-    fun mul(first: Pair<DoubleArray, DoubleArray>, second: Pair<DoubleArray, DoubleArray>)
-            : Pair<DoubleArray, DoubleArray> {
-        val size = first.first.size
-        val newLineRe = DoubleArray(size)
-        val newLineIm = DoubleArray(size)
-        for (i in newLineRe.indices) {
-            val a = first.first[i]
-            val b = first.second[i]
-            val c = second.first[i]
-            val d = second.second[i]
-            newLineRe[i] = a * c - b * d
-            newLineIm[i] = a * d + b * c
-        }
-        return Pair(newLineRe, newLineIm)
-    }
-
-    fun DoubleArray.div(number: Double): DoubleArray {
-        val new = this.copyOf()
-        new.forEachIndexed { index, value ->
-            new[index] = value / number
-        }
-        return new
-    }
-    fun DoubleArray.div(array: DoubleArray): DoubleArray {
-        val new = this.copyOf()
-        new.forEachIndexed { index, value ->
-            new[index] = value / array[index]
-        }
-        return new
-    }
-    fun DoubleArray.mul(number: Double): DoubleArray {
-        val new = this.copyOf()
-        new.forEachIndexed { index, value ->
-            new[index] = value * number
-        }
-        return new
-    }
-    fun DoubleArray.mul(other: DoubleArray): DoubleArray {
-        val new = this.copyOf()
-        new.forEachIndexed { index, value ->
-            new[index] = value * other[index]
-        }
-        return new
-    }
-    fun DoubleArray.add(number: Double): DoubleArray {
-        val new = this.copyOf()
-        new.forEachIndexed { index, value ->
-            new[index] = value + number
-        }
-        return new
-    }
-    fun DoubleArray.add(other: DoubleArray): DoubleArray {
-        val new = this.copyOf()
-        new.forEachIndexed { index, value ->
-            new[index] = value + other[index]
-        }
-        return new
-    }
+    fun Line.deconvolution(other: Line) =
+            idft(div(this.dftSeparate(), other.dftSeparate()))
 
     fun convolution(one: Line, other: Line) = Line(one.xs, other.ys)
 
     fun convolution(one: Line, other: DoubleArray) = Line(one.xs, convolution(one.ys, other))
 
     fun convolution(one: DoubleArray, other: DoubleArray): DoubleArray {
+        val pre = convolutionBoundary(one, other)
+        return pre.copyOfRange(other.size/2, one.size + other.size/2)
+    }
+
+    fun convolutionBoundary(one: DoubleArray, other: DoubleArray): DoubleArray {
         val n = one.size
         val m = other.size
         return DoubleArray(n + m) {
@@ -120,5 +28,34 @@ object Convolution {
             }
             result
         }
+    }
+    fun convolution(image: Array<DoubleArray>, kernel: Array<DoubleArray>): Array<DoubleArray> {
+        var kernelSum = kernel.sumByDouble { it.sum() }
+        if (kernelSum == 0.0) kernelSum = 1.0
+        val kHeightHalf = kernel.size / 2
+        val kWidthHalf = kernel[0].size / 2
+        val iHeight = image.size
+        val iWidth = image[0].size
+        val result = Array(image.size) { DoubleArray(image[0].size) }
+        for (y in (0 until iHeight)) {
+            for (x in (0 until iWidth)) {
+                var weightedPixelSum = 0.0
+                for (ky in (-kHeightHalf..kHeightHalf)) {
+                    for (kx in (-kWidthHalf..kWidthHalf)) {
+                        var pixel = 0.0
+                        val pixelY = y + ky
+                        val pixelX = x + kx
+                        if ((pixelY >= 0) and (pixelY < iHeight) and (pixelX >= 0) and (pixelX < iWidth)) {
+                            pixel = image[pixelY][pixelX]
+                        }
+                        val weight = kernel[ky + kHeightHalf][kx + kWidthHalf]
+                        weightedPixelSum += pixel * weight
+
+                    }
+                }
+                result[y][x] = weightedPixelSum / kernelSum
+            }
+        }
+        return result
     }
 }

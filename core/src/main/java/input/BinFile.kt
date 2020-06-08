@@ -31,8 +31,8 @@ object BinFile {
     fun readFloatsMatrix(filename: String, width: Int, height: Int, arraySize: Int = width): Array<FloatArray> {
         FileChannel.open(Paths.get(filename), StandardOpenOption.READ).use { ch ->
             val size = ch.size() / 4
-            if (size < width * height) {
-                throw IllegalArgumentException("File size is $size but expected $width x $height = ${width * height}")
+            require(size >= width * height) {
+                "File size is $size but expected $width x $height = ${width * height}"
             }
             return Array(height) { idx ->
                 val resArr = FloatArray(arraySize)

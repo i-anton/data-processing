@@ -1,5 +1,6 @@
 package console.demo
 
+import core.Line
 import core.analysis.Fourier.dft
 import core.analysis.Fourier.dftRemap
 import core.input.LineGenerator.harmonic
@@ -12,7 +13,7 @@ object DftHarmonics {
     fun harmonicDemo() {
         val dataList = frequencies.map {
             dataSetSingle("${it}hz",
-                    harmonic(1000, 100.0, it)
+                    Line(harmonic(1000, 100.0, it))
             )
         }.toTypedArray()
         Platform.startup { ShowCase.multi(*dataList).show() }
@@ -21,7 +22,7 @@ object DftHarmonics {
     fun dftDemo() {
         val dataList = frequencies.map {
             dataSetSingle("dft ${it}hz",
-                    harmonic(1000, 100.0, it).dft()
+                    Line(harmonic(1000, 100.0, it)).dft()
             )
         }.toTypedArray()
         Platform.startup { ShowCase.multi(*dataList).show() }
@@ -31,7 +32,7 @@ object DftHarmonics {
         val dots = 1000
         val dataList = frequencies.map {
             dataSetSingle("fixed dft ${it}hz",
-                    harmonic(dots, 100.0, it).dft().dftRemap(dots.toDouble())
+                    Line(harmonic(dots, 100.0, it)).dft().dftRemap(dots.toDouble())
             )
         }.toTypedArray()
         Platform.startup { ShowCase.multi(*dataList).show() }

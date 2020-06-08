@@ -10,7 +10,7 @@ import core.model.Filter.antiTrend
 import core.model.Filter.trendDetect
 import core.model.SingleTransforms.shift
 import core.model.SingleTransforms.spikes
-import core.model.add
+import core.model.sum
 import infrastructure.DataSetTransforms.dataSetMulti
 import infrastructure.DataSetTransforms.dataSetSingle
 import infrastructure.ShowCase
@@ -18,7 +18,7 @@ import javafx.application.Platform
 
 object DefectRemoval {
     fun removeConstantShiftDemo() {
-        val initialRand = random(100, -1.0, 1.0)
+        val initialRand = Line(random(100, -1.0, 1.0))
         val shiftedRand = initialRand.shift(100.0, 1.0)
         val antiShift = shiftedRand.antiShift()
         Platform.startup {
@@ -32,7 +32,7 @@ object DefectRemoval {
     }
 
     fun removeSpikesDemo() {
-        val initialRand = random(100, -1.0, 1.0)
+        val initialRand = Line(random(100, -1.0, 1.0))
         val spikedRand = initialRand.spikes(10, 5.0)
 
         val antiSpike = spikedRand.antiSpike(1.0)
@@ -54,8 +54,8 @@ object DefectRemoval {
 
     fun trendDetectionDemo() {
         val dots = 100
-        val spikedRand = random(dots, -1.0, 1.0).spikes(10, 5.0)
-        val trendy = spikedRand add linear(dots, 0.75, 50.0)
+        val spikedRand = Line(random(dots, -1.0, 1.0)).spikes(10, 5.0)
+        val trendy = spikedRand sum Line(linear(dots, 0.75, 50.0))
         val windowSize = 3
         val antiTrend = trendy.antiTrend(windowSize)
         val detectedTrend = Line(trendy.trendDetect(windowSize))

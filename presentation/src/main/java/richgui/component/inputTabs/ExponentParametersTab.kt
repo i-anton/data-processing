@@ -1,5 +1,6 @@
 package richgui.component.inputTabs
 
+import core.Line
 import core.input.LineGenerator
 import richgui.component.control.ParametersTab
 import richgui.component.control.TextFieldFormat
@@ -19,6 +20,6 @@ class ExponentParametersTab : ParametersTab("Экспонента") {
     }
 
     override fun generateResult() = listOf(
-            LineGenerator.exponent(dots.text.toInt(), koef.text.toDouble(), degree.text.toDouble())
+            Line(LineGenerator.exponent(dots.text.toInt(), koef.text.toDouble(), degree.text.toDouble()))
     )
 }

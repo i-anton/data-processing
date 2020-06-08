@@ -1,7 +1,10 @@
 package core.analysis
 
 import core.Line
-import kotlin.math.*
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToInt
 
 object CompositeStatistics {
 
@@ -46,21 +49,48 @@ object CompositeStatistics {
         }
     }
 
-    fun valuesDistribution(line: Line, intervalsCount: Int): Line {
-        val min = line.min()
-        val max = line.max()
-        val step = (max - min) / intervalsCount
-        val ys = DoubleArray(intervalsCount) {
-            val start = min + step * it
-            val end = start + step
-            var count = 0.0
-            for (j in line.ys)
-                if (j in start..end)
-                    count++
-            count
+    fun histogram(line: DoubleArray,
+                  intervalsCount: Int,
+                  min: Double = line.min()!!,
+                  max: Double = line.max()!!,
+                  resultBuffer: IntArray? = null): IntArray {
+        require(line.isNotEmpty())
+        require(intervalsCount > 0)
+        val divider = if (min == max) 1.0 else max - min
+        val intervalToRange = intervalsCount / divider
+        val ys = resultBuffer ?: IntArray(intervalsCount + 1)
+        val bufferSize = ys.size - 1
+        line.forEach { value ->
+            val index = ((value - min) * intervalToRange).roundToInt()
+            val safeIndex = min(max(index, 0), bufferSize)
+            ys[safeIndex]++
         }
-        return Line(intervalsCount,  {
-            min + step * (it + 1)
-        }, ys)
+        return ys
+    }
+
+    fun histogram(line: Array<DoubleArray>, intervalsCount: Int, min: Double, max: Double): IntArray {
+        require(intervalsCount > 0)
+        val accumulator = IntArray(intervalsCount + 1)
+        val resultBuffer = IntArray(intervalsCount + 1)
+        line.forEach {
+            histogram(it, intervalsCount, min, max, resultBuffer)
+            resultBuffer.forEachIndexed { index, value ->
+                accumulator[index] = value + resultBuffer[index]
+            }
+        }
+        return accumulator
+    }
+
+    fun histogram(line: Array<DoubleArray>, intervalsCount: Int): IntArray {
+        require(intervalsCount > 0)
+        var min = line[0][0]
+        var max = line[0][0]
+        line.forEach {
+            val localMin = it.min()!!
+            val localMax = it.max()!!
+            if (min > localMin) min = localMin
+            if (max < localMax) max = localMax
+        }
+        return histogram(line, intervalsCount, min, max)
     }
 }

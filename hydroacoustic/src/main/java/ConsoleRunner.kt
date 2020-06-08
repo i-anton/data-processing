@@ -87,7 +87,7 @@ fun noisify(data: Line, distance: Double, frequency: Double): Line {
 fun Line.amplitudeShiftKeyingDemodulation(dt: Double = 0.000001): Line {
     val kernelSize = 32
     val bpfApply = convolution(rectify(),
-            PassFilters.lowPassFilter(kernelSize, dt, 2.0))
+            PassFilters.lowPass(kernelSize, dt, 2.0))
     val size = size
     val threshold = bpfApply.max() / 2.0
     return Line(size) {
@@ -106,14 +106,14 @@ fun Line.frequencyShiftKeyingDemodulation(carrierFrequencyOn: Double,
     val kernelSize = 32
     val smoothingThreshold = 50.0
     val filteredOn = convolution(convolution(this,
-            PassFilters.bandPassFilter(kernelSize, dt, carrierFrequencyOn - frequencyDelta,
+            PassFilters.bandPass(kernelSize, dt, carrierFrequencyOn - frequencyDelta,
                     carrierFrequencyOn + frequencyDelta)).rectify(),
-            PassFilters.lowPassFilter(kernelSize, dt, smoothingThreshold))
+            PassFilters.lowPass(kernelSize, dt, smoothingThreshold))
 
     val filteredOff = convolution(convolution(this,
-            PassFilters.bandPassFilter(kernelSize, dt, carrierFrequencyOff - frequencyDelta,
+            PassFilters.bandPass(kernelSize, dt, carrierFrequencyOff - frequencyDelta,
                     carrierFrequencyOff + frequencyDelta)).rectify(),
-            PassFilters.lowPassFilter(kernelSize, dt, smoothingThreshold))
+            PassFilters.lowPass(kernelSize, dt, smoothingThreshold))
 
     val multiplier = filteredOn.max() / filteredOff.max()
     val shift = kernelSize * 2 + 1
@@ -134,9 +134,9 @@ fun Line.phaseShiftKeyingDemodulation(carrierFrequency: Double,
     val kernelSize = 32
     val filteredOn = convolution(
             convolution(this,
-                    PassFilters.bandPassFilter(kernelSize, dt, carrierFrequency - frequencyDelta,
+                    PassFilters.bandPass(kernelSize, dt, carrierFrequency - frequencyDelta,
                             carrierFrequency + frequencyDelta)).rectify(),
-            PassFilters.lowPassFilter(kernelSize, dt, 10.0))
+            PassFilters.lowPass(kernelSize, dt, 10.0))
 
     val size = size
     var delta = filteredOn.ys[0]

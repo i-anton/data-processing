@@ -27,7 +27,7 @@ object Filter {
 
     fun Line.antiSpikeWindowed(absRange: Double, windowSize: Int = 2): Line {
         val fixed = Line(this)
-        for ((index, i) in fixed.ys.withIndex()) {
+        fixed.ys.forEachIndexed { index, i ->
             if (abs(i) > absRange) {
                 val winStart = max(0, index - windowSize)
                 val winEnd = min(size, index + windowSize)

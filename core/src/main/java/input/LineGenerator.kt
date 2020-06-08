@@ -7,10 +7,10 @@ import kotlin.random.Random
 
 object LineGenerator {
     fun linear(dots: Int, angle: Double, offset: Double)
-            = Line(dots) { angle * it + offset }
+            = DoubleArray(dots) { angle * it + offset }
 
     fun exponent(dots: Int, koef: Double, degree: Double)
-            = Line(dots) { koef * exp(degree * it) }
+            = DoubleArray(dots) { koef * exp(degree * it) }
 
     fun piecewise(dots: Int, stepSize: Double): Line {
         val line = Line(dots)
@@ -29,19 +29,19 @@ object LineGenerator {
     }
 
     fun random(dots: Int, minVal: Double = 0.0,
-               maxVal: Double = 1.0, seed: Int = anySeed()): Line {
+               maxVal: Double = 1.0, seed: Int = anySeed()): DoubleArray {
         val rnd = Random(seed.toLong())
-        return Line(dots) { rnd.nextDouble() * (maxVal - minVal) + minVal }
+        return DoubleArray(dots) { rnd.nextDouble() * (maxVal - minVal) + minVal }
     }
 
     fun myRandom(dots: Int, minVal: Double = 0.0,
-                 maxVal: Double = 1.0, seed: Int = anySeed()): Line {
-        val rnd = MyRandom(seed)
-        return Line(dots) { rnd.nextDouble() * (maxVal - minVal) + minVal }
+                 maxVal: Double = 1.0): DoubleArray {
+        val rnd = GaussianRandom()
+        return DoubleArray(dots) { rnd.nextDouble() * (maxVal - minVal) + minVal }
     }
 
-    fun harmonic(dots: Int, amplitude: Double, frequency: Double, deltaF: Double = 0.001): Line {
+    fun harmonic(dots: Int, amplitude: Double, frequency: Double, deltaF: Double = 0.001): DoubleArray {
         val mul =  2.0 * Math.PI * frequency * deltaF
-        return Line(dots) { sin( mul * it ) * amplitude }
+        return DoubleArray(dots) { sin( mul * it ) * amplitude }
     }
 }

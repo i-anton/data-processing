@@ -20,10 +20,10 @@ object Combine {
         return resultLine
     }
 
-    private fun average(lines: List<Line>): Line {
+    private fun average(lines: List<DoubleArray>): Line {
         require(lines.all { line -> line.size == lines.first().size })
         return Line(DoubleArray(lines.first().size) {
-            lines.sumByDouble { line -> line.ys[it] } / lines.size
+            lines.sumByDouble { line -> line[it] } / lines.size
         })
     }
 
@@ -49,8 +49,108 @@ object Combine {
     }
 }
 
-infix fun Line.add(other: Line) = Combine.additive(this, other)
+infix fun Line.sum(other: Line) = Combine.additive(this, other)
 infix fun Line.mul(other: Line) = Combine.multiplicative(this, other)
 
 infix fun Line.mul(number: Double) = Combine.multiplicative(this, number)
-infix fun Line.add(number: Double) = Combine.additive(this, number)
+infix fun Line.sum(number: Double) = Combine.additive(this, number)
+
+
+fun div(first: Pair<DoubleArray, DoubleArray>, second: Pair<DoubleArray, DoubleArray>)
+        : Pair<DoubleArray, DoubleArray> {
+    val size = first.first.size
+    val newLineRe = DoubleArray(size)
+    val newLineIm = DoubleArray(size)
+    for (i in newLineRe.indices) {
+        val a = first.first[i]
+        val b = first.second[i]
+        val c = second.first[i]
+        val d = second.second[i]
+        newLineRe[i] = (a * c + b * d) /
+                (c * c + d * d)
+
+        newLineIm[i] = (b * c - a * d) /
+                (c * c + d * d)
+    }
+    return Pair(newLineRe, newLineIm)
+}
+
+fun mul(first: Pair<DoubleArray, DoubleArray>, second: Pair<DoubleArray, DoubleArray>)
+        : Pair<DoubleArray, DoubleArray> {
+    val size = first.first.size
+    val newLineRe = DoubleArray(size)
+    val newLineIm = DoubleArray(size)
+    for (i in newLineRe.indices) {
+        val a = first.first[i]
+        val b = first.second[i]
+        val c = second.first[i]
+        val d = second.second[i]
+        newLineRe[i] = a * c - b * d
+        newLineIm[i] = a * d + b * c
+    }
+    return Pair(newLineRe, newLineIm)
+}
+
+fun DoubleArray.div(number: Double): DoubleArray {
+    val new = this.copyOf()
+    new.forEachIndexed { index, value ->
+        new[index] = value / number
+    }
+    return new
+}
+
+fun DoubleArray.div(array: DoubleArray): DoubleArray {
+    val new = this.copyOf()
+    new.forEachIndexed { index, value ->
+        new[index] = value / array[index]
+    }
+    return new
+}
+
+fun DoubleArray.mul(number: Double): DoubleArray {
+    val new = this.copyOf()
+    new.forEachIndexed { index, value ->
+        new[index] = value * number
+    }
+    return new
+}
+
+fun DoubleArray.mul(other: DoubleArray): DoubleArray {
+    val new = this.copyOf()
+    new.forEachIndexed { index, value ->
+        new[index] = value * other[index]
+    }
+    return new
+}
+
+fun DoubleArray.sum(number: Double): DoubleArray {
+    val new = this.copyOf()
+    new.forEachIndexed { index, value ->
+        new[index] = value + number
+    }
+    return new
+}
+
+fun DoubleArray.sum(other: DoubleArray): DoubleArray {
+    val new = this.copyOf()
+    new.forEachIndexed { index, value ->
+        new[index] = value + other[index]
+    }
+    return new
+}
+
+fun copyImg(data: Array<DoubleArray>): Array<DoubleArray> = Array(data.size) { data[it].copyOf() }
+
+fun sum(one: Array<DoubleArray>, other: Array<DoubleArray>):
+        Array<DoubleArray> = Array(one.size) {
+    val oneRow = one[it]
+    val otherRow = other[it]
+    oneRow.sum(otherRow)
+}
+fun mul(one: Array<DoubleArray>, multiplier: Double):
+        Array<DoubleArray> = Array(one.size) {
+    val oneRow = one[it]
+    oneRow.mul(multiplier)
+}
+
+

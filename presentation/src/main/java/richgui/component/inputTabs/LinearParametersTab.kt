@@ -1,5 +1,6 @@
 package richgui.component.inputTabs
 
+import core.Line
 import core.input.LineGenerator
 import richgui.component.or
 import richgui.component.control.ParametersTab
@@ -19,6 +20,6 @@ class LinearParametersTab : ParametersTab("Линейный") {
     }
 
     override fun generateResult() = listOf(
-            LineGenerator.linear(dots.text.toInt(), angle.text.toDouble(), offset.text.toDouble())
+            Line(LineGenerator.linear(dots.text.toInt(), angle.text.toDouble(), offset.text.toDouble()))
     )
 }

@@ -7,15 +7,14 @@ import kotlin.math.sin
 object PassFilters {
 
     private val SMOOTH_WINDOW_P310 = arrayOf(0.35577019, 0.24369830, 0.07211497, 0.00630165)
-    private fun halfLowPassFilter(size: Int, dt: Double, fCut: Double): DoubleArray {
+    private fun halfLowPass(size: Int, dt: Double, fCut: Double): DoubleArray {
         val result = DoubleArray(size + 1)
         var param = 2.0 * dt * fCut
-        result[0] = param
+        result[0] = param * SMOOTH_WINDOW_P310.sumByDouble { it } * 2.0
         param *= PI
         for (i in 1 until result.size) result[i] = sin(param * i) / (PI * i)
         result[size] /= 2.0
 
-        result[0] *= SMOOTH_WINDOW_P310.sumByDouble { it } * 2.0
         var sumg = result[0]
         for (i in 1 until result.size) {
             val arg = (PI * i) / size
@@ -28,41 +27,33 @@ object PassFilters {
         return result
     }
 
-    fun lowPassFilter(size: Int, dt: Double, fCut: Double): DoubleArray {
+    fun lowPass(size: Int, dt: Double, fCut: Double): DoubleArray {
         val result = DoubleArray(2 * size + 1)
-        halfLowPassFilter(size, dt, fCut).apply { copyInto(result, size) }
+        halfLowPass(size, dt, fCut).apply { copyInto(result, size) }
         for (i in 0..size) result[i] = result[result.size - i - 1]
         return result
     }
 
-    fun highPassFilter(size: Int, dt: Double, fCut: Double): DoubleArray {
-        val result = lowPassFilter(size, dt, fCut)
-        for (i in result.indices) {
-            result[i] = when (i) {
-                size -> 1 - result[i]
-                else -> -result[i]
-            }
-        }
+    fun highPass(size: Int, dt: Double, fCut: Double): DoubleArray {
+        val result = lowPass(size, dt, fCut)
+        for (i in result.indices) result[i] = -result[i]
+        result[size] = result[size] + 1
         return result
     }
 
-    fun bandSelectFilter(size: Int, dt: Double, fCutLower: Double, fCutUpper: Double): DoubleArray {
-        assert(fCutLower < fCutUpper)
-        val lpfLower = lowPassFilter(size, dt, fCutLower)
-        val lpfUpper = lowPassFilter(size, dt, fCutUpper)
-        for (i in lpfLower.indices) {
-            lpfLower[i] = when (i) {
-                size -> 1 + lpfLower[i] - lpfUpper[i]
-                else -> lpfLower[i] - lpfUpper[i]
-            }
-        }
+    fun bandSelect(size: Int, dt: Double, fCutLower: Double, fCutUpper: Double): DoubleArray {
+        require(fCutLower < fCutUpper)
+        val lpfLower = lowPass(size, dt, fCutLower)
+        val lpfUpper = lowPass(size, dt, fCutUpper)
+        for (i in lpfLower.indices) lpfLower[i] = lpfLower[i] - lpfUpper[i]
+        lpfLower[size] = lpfLower[size] + 1
         return lpfLower
     }
 
-    fun bandPassFilter(size: Int, dt: Double, fCutLower: Double, fCutUpper: Double): DoubleArray {
-        assert(fCutLower < fCutUpper)
-        val lpfLower = lowPassFilter(size, dt, fCutLower)
-        val lpfUpper = lowPassFilter(size, dt, fCutUpper)
+    fun bandPass(size: Int, dt: Double, fCutLower: Double, fCutUpper: Double): DoubleArray {
+        require(fCutLower < fCutUpper)
+        val lpfLower = lowPass(size, dt, fCutLower)
+        val lpfUpper = lowPass(size, dt, fCutUpper)
         for (i in lpfLower.indices) lpfLower[i] = lpfUpper[i] - lpfLower[i]
         return lpfLower
     }

@@ -1,5 +1,6 @@
 package console.demo
 
+import core.Line
 import core.analysis.Correlation.autoCorrelation
 import core.analysis.Correlation.crossCorrelation
 import core.analysis.Convolution.convolution
@@ -10,7 +11,7 @@ import core.analysis.Fourier.idft
 import core.input.BinFile
 import core.input.LineGenerator.harmonic
 import core.input.PassFilters
-import core.model.add
+import core.model.sum
 import infrastructure.DataSetTransforms.dataSetSingle
 import infrastructure.ShowCase
 import javafx.application.Platform
@@ -27,10 +28,10 @@ object FloatArrayAnalysis {
         amplitudesFrequenciesPairs.forEach {
             println("Frequency: ${it.first} \t Amplitude:${it.second}")
         }
-        val restored = amplitudesFrequenciesPairs
-                .map { harmonic(1000, it.second * 2.0, it.first) }
-                .reduce { acc, line -> acc add line }
-        val some = harmonic(1000, 30.0, 5.0)
+//        val restored = amplitudesFrequenciesPairs
+//                .map { Line(harmonic(1000, it.second * 2.0, it.first)) }
+//                .reduce { acc, line -> acc sum line }
+        val some = Line(harmonic(1000, 30.0, 5.0))
         Platform.startup {
             ShowCase.multi(
                     dataSetSingle("input", data),
@@ -45,8 +46,8 @@ object FloatArrayAnalysis {
         val path = javaClass.getResource("pgp_f4-1K-1ms.dat").path
         val data = BinFile.readFloatsLine(path)
 
-        val combined = harmonic(1000, 5.0, 15.0) add
-                harmonic(1000, 10.0, 45.0)
+        val combined = Line(harmonic(1000, 5.0, 15.0)) sum
+                Line(harmonic(1000, 10.0, 45.0))
         val idft = idft(combined.dftSeparate())
         Platform.startup {
             ShowCase.multi(
@@ -64,10 +65,10 @@ object FloatArrayAnalysis {
         val size = 64
         val dt = 0.001
 
-        val lpf = PassFilters.lowPassFilter(size, dt, 25.0)
-        val hpf = PassFilters.highPassFilter(size, dt, 100.0)
-        val bpf = PassFilters.bandPassFilter(size, dt, 25.0, 100.0)
-        val bsf = PassFilters.bandSelectFilter(size, dt, 25.0, 100.0)
+        val lpf = PassFilters.lowPass(size, dt, 25.0)
+        val hpf = PassFilters.highPass(size, dt, 100.0)
+        val bpf = PassFilters.bandPass(size, dt, 25.0, 100.0)
+        val bsf = PassFilters.bandSelect(size, dt, 25.0, 100.0)
 
         val lpfApply = convolution(data, lpf)
         val hpfApply = convolution(data, hpf)

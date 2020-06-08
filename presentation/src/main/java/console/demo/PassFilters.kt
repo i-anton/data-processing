@@ -16,10 +16,10 @@ object PassFilters {
         val dt = 0.001
         val size = 64
         return listOf(
-                Line(PassFilters.highPassFilter(size, dt, fCut)),
-                Line(PassFilters.lowPassFilter(size, dt, fCut)),
-                Line(PassFilters.bandSelectFilter(size, dt, fCut, fCutUpper)),
-                Line(PassFilters.bandPassFilter(size, dt, fCut, fCutUpper))
+                Line(PassFilters.highPass(size, dt, fCut)),
+                Line(PassFilters.lowPass(size, dt, fCut)),
+                Line(PassFilters.bandSelect(size, dt, fCut, fCutUpper)),
+                Line(PassFilters.bandPass(size, dt, fCut, fCutUpper))
         )
     }
 
@@ -53,8 +53,8 @@ object PassFilters {
         val dt = 0.001
         val size = 64
 
-        val lowPass = Line(PassFilters.lowPassFilter(size, dt, fCut))
-        val highPass = Line(PassFilters.highPassFilter(size, dt, fCut))
+        val lowPass = Line(PassFilters.lowPass(size, dt, fCut))
+        val highPass = Line(PassFilters.highPass(size, dt, fCut))
 
         Platform.startup {
             ShowCase.multi(

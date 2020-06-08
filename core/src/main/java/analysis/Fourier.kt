@@ -23,6 +23,25 @@ object Fourier {
         sqrt(sumReal * sumReal + sumImag * sumImag)
     }
 
+    fun dft(data: DoubleArray): Pair<DoubleArray, DoubleArray> {
+        val size = data.size
+        val reals = DoubleArray(size)
+        val imags = DoubleArray(size)
+        for (k in 0 until size) {
+            val multiplier = (2.0 * Math.PI * k) / size
+            var sumReal = 0.0
+            var sumImag = 0.0
+            data.forEachIndexed { t, y ->
+                val angle = multiplier * t
+                sumReal += y * cos(angle)
+                sumImag += y * sin(angle)
+            }
+            reals[k] = sumReal / size
+            imags[k] = sumImag / size
+        }
+        return Pair(reals, imags)
+    }
+
     fun dft(data: FloatArray): Pair<DoubleArray, DoubleArray> {
         val size = data.size
         val reals = DoubleArray(size)

@@ -18,7 +18,7 @@ object CardiogramDemo {
         val cardioid = Cardiogram.cardiogram(dots, freq, dt, interval, relaxation)
         val baseFunction = Line(Cardiogram.baseFunction(dots, freq, dt, relaxation))
         val deltaFunction = Line(Cardiogram.deltaFunction(dots, interval))
-        val combined = LineGenerator.harmonic(1000, 5.0, 15.0)
+        val combined = Line(LineGenerator.harmonic(1000, 5.0, 15.0))
         Platform.startup {
             ShowCase.multi(
                     DataSetTransforms.dataSetSingle("cardioid", cardioid),

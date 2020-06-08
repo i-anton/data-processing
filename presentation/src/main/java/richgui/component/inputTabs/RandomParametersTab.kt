@@ -1,5 +1,6 @@
 package richgui.component.inputTabs
 
+import core.Line
 import core.input.LineGenerator
 import richgui.component.control.ParametersTab
 import richgui.component.or
@@ -16,6 +17,6 @@ class RandomParametersTab : ParametersTab("Cлучайный") {
     }
 
     override fun generateResult() = listOf(
-            LineGenerator.random(dots.text.toInt(), 0.0, 1.0, seed.text.toInt())
+            Line(LineGenerator.random(dots.text.toInt(), 0.0, 1.0, seed.text.toInt()))
     )
 }
